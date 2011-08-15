@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/tooltwist/wbd/svn/!svn/ver/386/fip
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/tooltwist/wbd/svn/!svn/ver/387/fip/.project
+END
+fip-createPayload.xml
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/tooltwist/wbd/svn/!svn/ver/420/fip/fip-createPayload.xml
+END
+createZip.xml
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/tooltwist/wbd/svn/!svn/ver/438/fip/createZip.xml
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/tooltwist/wbd/svn/!svn/ver/425/fip/.classpath
+END

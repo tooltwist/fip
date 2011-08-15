@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/tooltwist/wbd/svn/!svn/ver/387/fip/scripts
+END
+fipserver
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/fipserver
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/README.txt
+END
+editDestinationConfig
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/editDestinationConfig
+END
+editSourceConfig
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/editSourceConfig
+END
+newSource
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/newSource
+END
+registerDestinationWithSource
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/registerDestinationWithSource
+END
+fip
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/fip
+END
+newDestination
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/newDestination
+END
+osx_fix_permissions
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/osx_fix_permissions
+END
+linux_fix_permissions
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/tooltwist/wbd/svn/!svn/ver/439/fip/scripts/linux_fix_permissions
+END

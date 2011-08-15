@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Jul 4, 2009 8:46:49 PM                                                        
+
+     project    
+     Create the installation zip file for FIP
+                   
+     philipcallender                                                                
+     ====================================================================== -->
+<project name="createZip" default="default">
+	<property name="VERSION" value="1.0"></property>
+	<property name="tmptop" value="/tmp/fip-${VERSION}"></property>
+	<property name="tmpdir" value="/tmp/fip-${VERSION}/fip"></property>
+	<property name="zipfile" value="/tmp/fip-${VERSION}.zip"></property>
+	
+    <description>
+            Create the installation zip file for FIP
+    </description>
+
+	<target name="default" depends="clean,tmp,zip">
+	</target>
+	
+	<target name="clean">
+		<delete dir="${tmpdir}"/>
+		<delete file="${zipfile}"/>
+	</target>
+
+    <target name="tmp">
+    	<mkdir dir="${tmpdir}"/>
+    	<mkdir dir="${tmpdir}/lib"/>
+		<!--
+		<javac srcdir="src" destdir="${tmpdir}" fork="true" memorymaximumsize="500m" debug="true">
+			<classpath refid="tooltwist_t.class.path">
+			</classpath>
+		</javac>
+		-->
+    	<copy todir="${tmpdir}">
+    		<fileset dir="scripts" id="id">
+			</fileset>
+    	</copy>
+    	<chmod perm="+x" file="${tmpdir}/fip"></chmod>
+    	<chmod perm="+x" file="${tmpdir}/fipserver"></chmod>
+    	<chmod perm="+x" file="${tmpdir}/osx_fix_permissions"></chmod>
+    	<chmod perm="+x" file="${tmpdir}/newSource"></chmod>
+    	<chmod perm="+x" file="${tmpdir}/newDestination"></chmod>
+    	<chmod perm="+x" file="${tmpdir}/registerDestinationWithSource"></chmod>
+    	<chmod perm="+x" file="${tmpdir}/editSourceConfig"></chmod>
+    	<chmod perm="+x" file="${tmpdir}/editDestinationConfig"></chmod>
+    	<copy todir="${tmpdir}/lib">
+    		<fileset dir="WebContent/WEB-INF/lib" id="id">
+			</fileset>
+    	</copy>
+    	<copy todir="${tmpdir}/lib">
+    		<fileset dir="../fipServer/lib" id="id">
+			</fileset>
+    	</copy>
+    	<jar destfile="${tmpdir}/lib/fip.jar">
+    		<fileset dir="bin" id="id">
+			</fileset>
+    		<fileset dir="../fipServer/bin" id="id">
+			</fileset>
+    	</jar>
+    </target>
+	
+	<target name="zip">
+		<zip destfile="${zipfile}" basedir="${tmpdir}/.." />
+		<echo message="Zip file created: ${zipfile}"></echo>
+	</target>
+
+</project>

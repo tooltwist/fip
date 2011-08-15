@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip
+END
+FipServer.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/tooltwist/wbd/svn/!svn/ver/430/fip/src/tooltwist/fip/FipServer.java
+END
+TransactionStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/TransactionStatus.java
+END
+FipThisMachineServerProxy.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/FipThisMachineServerProxy.java
+END
+FipInstallUpdatesStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipInstallUpdatesStatus.java
+END
+SourceProperties.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/tooltwist/wbd/svn/!svn/ver/431/fip/src/tooltwist/fip/SourceProperties.java
+END
+Fip.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/tooltwist/wbd/svn/!svn/ver/439/fip/src/tooltwist/fip/Fip.java
+END
+NewTransactionReply.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/tooltwist/wbd/svn/!svn/ver/439/fip/src/tooltwist/fip/NewTransactionReply.java
+END
+FipDelta.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipDelta.java
+END
+FipList.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/FipList.java
+END
+FipBufferCapacityCalculator.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/FipBufferCapacityCalculator.java
+END
+FipDeltaList.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/tooltwist/wbd/svn/!svn/ver/439/fip/src/tooltwist/fip/FipDeltaList.java
+END
+FipFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipFile.java
+END
+FipRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/FipRule.java
+END
+FipRule_ignore.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/FipRule_ignore.java
+END
+FipCorruptionException.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipCorruptionException.java
+END
+FipRule_mapDirectory.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipRule_mapDirectory.java
+END
+FipRule_map.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipRule_map.java
+END
+FipBatchOfUpdates.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/tooltwist/wbd/svn/!svn/ver/431/fip/src/tooltwist/fip/FipBatchOfUpdates.java
+END
+FipException.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipException.java
+END
+FipRequest.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/tooltwist/wbd/svn/!svn/ver/422/fip/src/tooltwist/fip/FipRequest.java
+END
+DestinationProperties.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/tooltwist/wbd/svn/!svn/ver/431/fip/src/tooltwist/fip/DestinationProperties.java
+END
+FipRequestList.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/tooltwist/wbd/svn/!svn/ver/422/fip/src/tooltwist/fip/FipRequestList.java
+END
+FipRuleParameter.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipRuleParameter.java
+END
+FipServerProxy.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/FipServerProxy.java
+END
+FipHttpServerProxy.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/tooltwist/wbd/svn/!svn/ver/439/fip/src/tooltwist/fip/FipHttpServerProxy.java
+END
+FipServer_updateExecuter.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/tooltwist/wbd/svn/!svn/ver/439/fip/src/tooltwist/fip/FipServer_updateExecuter.java
+END
+FipRule_dontInstall.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipRule_dontInstall.java
+END
+FipRule_include.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/tooltwist/wbd/svn/!svn/ver/387/fip/src/tooltwist/fip/FipRule_include.java
+END
+StreamGobbler.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/tooltwist/wbd/svn/!svn/ver/418/fip/src/tooltwist/fip/StreamGobbler.java
+END
+TransactionProperties.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/tooltwist/wbd/svn/!svn/ver/430/fip/src/tooltwist/fip/TransactionProperties.java
+END
