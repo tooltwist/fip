@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+#	Test FIP index creation times.
+#
+. ./functions
+
+clear
+echo "#####################################################################"
+
+NUM_CLONES=40
+#MAX_MEMORY=1m
+INITIAL_HASHMAP_SIZE=1000000
+
+#
+#	Get the right number of clones ready
+#
+removeClones
+cnt=2
+while [ ${cnt} -le ${NUM_CLONES} ] ; do
+	#echo ${cnt}
+	needClone ${cnt}
+
+	cnt=`expr ${cnt} + 1`
+done
+(cd $SERVER; du -sk .)
+
+#
+#	Rebuild the index
+#
+echo "------------------------------------"
+echo Full Index creation
+removeManifest
+createIndex
+
+#
+#	This time just load the index
+#
+echo "------------------------------------"
+echo Update with no change
+createIndex
+
+#
+#	Update the index after updating 500 files
+#
+echo "------------------------------------"
+echo Update after 500 files touched
+touch500files
+createIndex
+
+#
+#	Update the index after updating 5% of files
+#
+echo "------------------------------------"
+echo Update after 5% of files touched
+touch5percent
+createIndex
+
+#
+#	See how long tar takes
+#
+echo "------------------------------------"
+echo Time to tar the files
+timeToTar

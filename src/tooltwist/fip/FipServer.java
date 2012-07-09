@@ -129,7 +129,7 @@ public class FipServer
 			// Check the source properties are okay
 			new SourceProperties(rootDirectory, ipaddr); // will throw an exception if there is a problem.
 		}
-		
+
 		// Get the file list
 		File rootDir = new File(rootDirectory);
 		FipList list = FipList.loadListFromFile(rootDir);
