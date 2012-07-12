@@ -119,7 +119,7 @@ import tooltwist.fip.FipBatchOfUpdates.BufferStatus;
 public class Fip
 {
 	public static byte MAJOR_VERSION_NUMBER = 0x01;
-	public static byte MINOR_VERSION_NUMBER = 0x00;	
+	public static byte MINOR_VERSION_NUMBER = 0x02;	
 	private Vector<FipRule> rules = new Vector<FipRule>();
 
 	/**
@@ -604,14 +604,51 @@ public class Fip
 		return os.toByteArray();
 	}
 
+	/**
+	 * Prepare the index in a source or destination directory.
+	 */
+	public static void prepareIndex(String rootDirectory, boolean verbose) throws IOException, FipCorruptionException, FipException
+	{
+		// Get the file list
+		File rootDir = new File(rootDirectory);
+		if ( !rootDir.exists() || !rootDir.isDirectory())
+		{
+			System.err.println("Unknown source or destination folder: " + rootDirectory);
+			System.exit(1);
+		}
+		
+		System.out.println("Loading existing index...");
+		long time1 = System.currentTimeMillis();
+		FipList list = FipList.loadListFromFile(rootDir);
+		long time2 = System.currentTimeMillis();
+		long duration1 = time2 - time1;
+		System.out.println(" - loaded " + list.numFiles() + " files in " + duration1 + "ms.");
+		System.out.println("Updating index...");
+		long time3 = System.currentTimeMillis();
+		list.syncWithRealFiles(rootDir);
+		long time4 = System.currentTimeMillis();
+		long duration2 = time4 - time3;
+		System.out.println(" - updated " + list.numFiles() + " files in " + duration2 + "ms.");
+		
+		long duration3 = duration1 + duration2;
+		Runtime runtime = Runtime.getRuntime();
+		long totalMemory = runtime.totalMemory() / 1024;
+		long maxMemory = runtime.maxMemory() / 1024;
+		System.out.println("Completed: " + list.numFiles()
+				+ ", " + duration3 + ", " + duration1 + ", " + duration2
+				+ "," + totalMemory + "/" + maxMemory);
+	}
+
 	public static void usage()
 	{
-		System.err.println("usage: fip [-v -l -d] source destination");
+		System.err.println("usage: fip [-l -v -p] source destination");
 		System.err.println("       fip -s destination");
 		System.err.println("       fip -c destination");
 		System.err.println("       fip -a destination");
+		System.err.println("       fip -i location");
+		System.err.println("       fip -V");
 		System.err.println("");
-		System.err.println("  The 'source' and 'destination' parameters can be either:");
+		System.err.println("  The 'source' and 'destination' locations can be either:");
 		System.err.println("   - the path of a directory on the current machine, or");
 		System.err.println("   - a URL similar to server1.acme.com:40001/home/slot1/server.");
 		System.err.println("");
@@ -619,6 +656,8 @@ public class Fip
 		System.err.println("  -l  List updates, but do not perform them on the destination.");
 		System.err.println("  -v  Verbose mode. Display information useful for debugging problems.");
 		System.err.println("  -s  Show the status, in particular, any previously incompleted transaction.");
+		System.err.println("  -i  Prepare the index but do not copy files (only on local machine).");
+		System.err.println("  -p  Use the index pre-prepared using the -i option.");
 		System.err.println("  -c  Commit the current transaction");
 		System.err.println("  -a  Abort the current transaction");
 		System.err.println("  -V  Show the version number");
@@ -641,11 +680,14 @@ public class Fip
 		boolean verbose = false;
 		boolean listOnly = false;
 		boolean statusOnly = false;
-		boolean abortFlag = false;
-		boolean commitFlag = false;
+		boolean indexOnly = false;
+		boolean preparedIndex = false; // Don't re-index
+//		boolean abortFlag = false;
+//		boolean commitFlag = false;
 		boolean debugMessages = false;
 		int numArgs = args.length;
 		int cntarg = 0;
+		int cntExcusiveArgs = 0;
 		for ( ; cntarg < numArgs && args[cntarg].startsWith("-"); cntarg++)
 		{
 			String arg = args[cntarg];
@@ -658,17 +700,27 @@ public class Fip
                 case 'l':
                     listOnly = true;
                     break;
+                case 'p':
+                    preparedIndex = true;
+                    break;
                 case 's':
                     statusOnly = true;
                     break;
-                case 'c':
-                    commitFlag = true;
-                    break;
-                case 'a':
-                    abortFlag = true;
+//                case 'c':
+//                    commitFlag = true;
+//                    cntExcusiveArgs++;
+//                    break;
+//                case 'a':
+//                    abortFlag = true;
+//                    cntExcusiveArgs++;
+//                    break;
+                case 'i':
+                    indexOnly = true;
+                    cntExcusiveArgs++;
                     break;
                 case 'V':
    					System.out.println("FIP version " + MAJOR_VERSION_NUMBER + "." + MINOR_VERSION_NUMBER);
+   					System.exit(0);
                     break;
                 default:
                     usage();
@@ -677,10 +729,14 @@ public class Fip
 			}
 		}
 		int numRemainingArgs = numArgs - cntarg;
-		
-		// Check that we only have one or none of status, and abort
-		if (statusOnly && abortFlag)
+		if (listOnly || preparedIndex) // implies normal install mode
+			cntExcusiveArgs++;
+		if (cntExcusiveArgs > 1)
 			usage();
+		
+//		// Check that we only have one or none of status, and abort
+//		if (statusOnly && abortFlag)
+//			usage();
 
 		try {
 			Fip fip = new Fip();
@@ -693,34 +749,41 @@ public class Fip
 				fip.processStatusCheck(destinationUrl);
 				System.exit(1);
 			}
-			else if (commitFlag)
+			else if (indexOnly)
 			{
-				// Commit changes to a destination
-				if (abortFlag)
-				{
-					System.err.println("Sorry, commit AND abort is not possible.");
-					System.exit(1);
-				}
-				if (numRemainingArgs != 3)
-					usage();
-				String sourceUrl = args[cntarg];
-				String destinationUrl = args[cntarg + 1];
-				String txId = args[cntarg + 2];
-				fip.processCommit(sourceUrl, destinationUrl, txId);
-				System.exit(1);
-			}
-			else if (abortFlag)
-			{
-				// Abort changes to a destination
 				if (numRemainingArgs != 1)
 					usage();
-				String destinationUrl = args[cntarg + 1];
-				fip.processAbort(destinationUrl);
-				System.exit(1);
+				String localDirectory = args[cntarg];
+				prepareIndex(localDirectory, verbose);
 			}
+//			else if (commitFlag)
+//			{
+//				// Commit changes to a destination
+//				if (abortFlag)
+//				{
+//					System.err.println("Sorry, commit AND abort is not possible.");
+//					System.exit(1);
+//				}
+//				if (numRemainingArgs != 3)
+//					usage();
+//				String sourceUrl = args[cntarg];
+//				String destinationUrl = args[cntarg + 1];
+//				String txId = args[cntarg + 2];
+//				fip.processCommit(sourceUrl, destinationUrl, txId);
+//				System.exit(1);
+//			}
+//			else if (abortFlag)
+//			{
+//				// Abort changes to a destination
+//				if (numRemainingArgs != 1)
+//					usage();
+//				String destinationUrl = args[cntarg + 1];
+//				fip.processAbort(destinationUrl);
+//				System.exit(1);
+//			}
 			else
 			{
-				// Normal transfer (default is to commit after all files are tranferred)
+				// Normal transfer (default is to commit after all files are transferred)
 				if (numRemainingArgs != 2)
 					usage();
 				String sourceUrl = args[cntarg];

@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Vector;
 
 import tooltwist.fip.FipDelta.Type;
@@ -21,7 +21,8 @@ public class FipList
 	 * Note: don't confuse this with the file system root.
 	 */
 	private static final String FIP_MANIFEST = Fip.PREFIX + "manifest";
-	private Hashtable<String, FipFile> list = new Hashtable<String, FipFile>();
+	private static final int INITIAL_CAPACITY = (2 * 1024 * 1024);
+	private HashMap<String, FipFile> list = new HashMap<String, FipFile>(INITIAL_CAPACITY);
 	private boolean listVariedFromRealFiles = false;
 	
 	public void syncWithRealFiles(File rootDirectory) throws FipException
@@ -299,6 +300,10 @@ public class FipList
 	public boolean containsFile(String relativePath)
 	{
 		return this.list.containsKey(relativePath);
+	}
+
+	public int numFiles() {
+		return list.size();
 	}
 
 }

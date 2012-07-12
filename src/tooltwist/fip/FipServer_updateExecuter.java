@@ -125,6 +125,10 @@ public class FipServer_updateExecuter
 		{
 			return prepareUpdates_0_1(destinationRoot, destinationProperties, txId);
 		}
+		else if (major == 1 && minor == 2)
+		{
+			return prepareUpdates_0_1(destinationRoot, destinationProperties, txId);
+		}
 		throw new FipException("Unknown protocol version: " + major + "." + minor);
 	}
 

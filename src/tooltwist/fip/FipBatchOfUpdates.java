@@ -47,7 +47,7 @@ public class FipBatchOfUpdates
 //	private static final int PREFERRED_MAX_TRANSMISSION = 100000;
 	protected static final byte FLAG_EXECUTABLE = 0x01;
 
-	private byte[] buf = new byte[BUFFER_LENGTH]; // An array of buffers
+	private byte[] buf = new byte[BUFFER_LENGTH + 100000]; // An array of buffers. ZOZ Added extra to prevent crash
 	private int nextPos = 0;
 	private int numInstallsInBuffer = 0;
 	private int numDeletesInBuffer = 0;
@@ -159,6 +159,11 @@ public class FipBatchOfUpdates
 		// Add the file contents
 		addToBuffer(MAGIC_BEFORE_FILE_CONTENTS);
 		FileInputStream is = new FileInputStream(file);
+//System.out.println("buf.length=" + buf.length + ", nextPos=" + nextPos + ", length=" + length);
+if (nextPos + length > buf.length) {
+	System.err.println("Buffer overrun");
+	int abc = 123;
+}
 		if (is.read(buf, nextPos, length) != length)
 		{
 			throw new FipException("Error reading " + length + " bytes from: " + file.getAbsolutePath());

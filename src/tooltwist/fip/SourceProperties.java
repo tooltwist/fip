@@ -3,13 +3,13 @@ package tooltwist.fip;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class SourceProperties
 {
 	private String sourceUuid = null;
-	private Hashtable<String, String> passphrases = new Hashtable<String, String>(); // destinationUuid->passphrase
+	private HashMap<String, String> passphrases = new HashMap<String, String>(); // destinationUuid->passphrase
 
 	public SourceProperties(String sourceRoot, String ipaddr) throws FipException
 	{
