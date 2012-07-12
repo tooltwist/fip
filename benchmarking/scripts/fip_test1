@@ -1,0 +1,103 @@
+#!/bin/bash
+#
+#	Test FIP install times, by installing various percentages of the total files.
+#	The total number of files is set by un-commenting out the "cloneFiles" lines.
+#
+. ./functions
+
+
+clear
+echo "#####################################################################"
+echo Preparation...
+removeClones
+cloneFiles 2
+cloneFiles 3
+cloneFiles 4
+cloneFiles 5
+cloneFiles 6
+cloneFiles 7
+cloneFiles 8
+cloneFiles 9
+cloneFiles 10
+cloneFiles 11
+cloneFiles 12
+cloneFiles 13
+cloneFiles 14
+cloneFiles 15
+cloneFiles 16
+
+countFiles
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+
+# Install from scratch
+tidyRemote ${REMOTE_IP}
+removeRemoteFiles ${REMOTE_IP}
+removeRemoteManifest ${REMOTE_IP}
+listRemoteFiles ${REMOTE_IP}
+removeManifest ${REMOTE_IP}
+deploy ${REMOTE_IP} From scratch
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+
+# Reconstruct remote manifest
+tidyRemote ${REMOTE_IP}
+removeRemoteManifest ${REMOTE_IP}
+deploy ${REMOTE_IP} "Rebuild remote manifest"
+/bin/echo -n "PRESS RETURN WHEN FIPSERVER IS READY: "
+read
+
+# Reconstruct local manifest
+tidyRemote ${REMOTE_IP}
+removeManifest ${REMOTE_IP}
+deploy ${REMOTE_IP} "Rebuild local manifest"
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+
+# Without changes
+tidyRemote ${REMOTE_IP}
+deploy ${REMOTE_IP} "No change"
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+
+# Change 500 files
+tidyRemote ${REMOTE_IP}
+truncateRemote500files ${REMOTE_IP}
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+deploy ${REMOTE_IP} "Redeploy 500 files"
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+
+# Throwaway
+tidyRemote ${REMOTE_IP}
+deploy ${REMOTE_IP} "Throw away"
+/bin/echo -n "CRAP. PRESS RETURN WHEN READY: "
+read
+
+# Change 5% of files
+tidyRemote ${REMOTE_IP}
+truncateRemote5percent ${REMOTE_IP}
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+deploy ${REMOTE_IP} "Redeploy all JSPs"
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+
+# Throwaway
+tidyRemote ${REMOTE_IP}
+deploy ${REMOTE_IP} "Throw away"
+/bin/echo -n "CRAP. PRESS RETURN WHEN READY: "
+read
+
+# Reinstall all JSP files
+tidyRemote ${REMOTE_IP}
+removeRemoteJSPs ${REMOTE_IP}
+deploy ${REMOTE_IP} "Redeploy all JSPs"
+/bin/echo -n "PRESS RETURN WHEN READY: "
+read
+
+echo "#####################################################################"
+exit 0;
+
+

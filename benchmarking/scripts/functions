@@ -1,0 +1,172 @@
+#!/bin/bash
+#
+#	Install to one server
+#
+#. ./setServers
+
+FIP=/Users/benchmark/fip
+SERVER=/Users/benchmark/server
+REMOTE_IP=10.0.1.155
+REMOTE_SERVER=/home/benchmark/server
+REMOTE_USER=benchmark
+
+
+function countFiles {
+	/bin/echo -n "Files:  "
+	(cd $SERVER; find * -type f | wc -l)
+	/bin/echo -n "Size:   "
+	(cd $SERVER; du -ms .)
+	/bin/echo -n "JSPs:   "
+	(cd $SERVER; find * -type f -name '*.jsp' | wc -l)
+	/bin/echo -n "Images: "
+	(cd $SERVER; find . -type f -name '*.png' -o -name '*.jpg' | wc -l)
+}
+
+function removeManifest {
+	echo "	removing local manifest"
+	rm -f $SERVER/.fip-manifest
+}
+
+function deploy {
+	# 1: host
+	# 2: Description
+	(
+		cd $FIP
+		echo ""
+		echo "------- deploy to ${1}: ${2}"
+		time ./fip ${SERVER} ${1}:39393${REMOTE_SERVER}
+	)
+}
+
+#
+#	Put a specific clone directory into the server directory, creating if necessary.
+#
+function needClone()
+{
+	(
+		cd $SERVER
+		local num=$1
+		local dir=clone_${num}
+		#echo dir=$dir
+		if [ -d ./${dir} ] ; then
+			echo ${dir} already installed
+		elif [ -d ../spareClones/${dir} ] ; then
+			echo Reusing ${dir}
+			mv ../spareClones/${dir} ${dir}
+		else
+			echo Creating a new clone ${dir}
+			mkdir ${dir}
+			tar cf - `ls | grep -v clone_` | (cd ${dir}; tar xf -)
+		fi
+	)
+}
+
+#
+#	Remove all clone directories from the server directory, saving them for later.
+#
+function removeClones()
+{
+	(
+		cd $SERVER
+		echo Moving all clones back to ../spareClones
+		for n in clone_* ; do
+			mv ${n} ../spareClones
+		done
+	)
+}
+
+function createIndex
+{
+	(
+		cd $FIP
+		#echo ""
+		#echo "------- indexing ${SERVER}"
+		echo time ./fip -i ${SERVER}
+		time ./fip -i ${SERVER}
+	)
+}
+
+function listRemoteFiles {
+	# $1: ip address
+	echo
+	echo "Remote files:"
+	ssh ${REMOTE_USER}@${1} "cd server; ls -la"
+}
+
+function tidyRemote {
+	# $1: ip address
+	echo "	tidying remote"
+	ssh ${REMOTE_USER}@${1} "cd server; rm -rf .fip-prepare* .fip-rollback* .fip-log"
+}
+
+function removeRemoteManifest {
+	# $1: ip address
+	echo "	removing remote manifest"
+	ssh ${REMOTE_USER}@${1} "cd server; rm -rf .fip-manifest"
+}
+
+function truncateRemote5percent {
+	# $1: ip address
+	echo "	removing 5% of remote files"
+	ssh ${REMOTE_USER}@${1} benchmark/trucate5percent
+}
+
+function truncateRemote500files {
+	# $1: ip address
+	echo "	removing 500 remote files"
+	ssh ${REMOTE_USER}@${1} benchmark/trucate500files
+}
+
+function removeRemoteFiles {
+	# $1: ip address
+	echo "	removing remote files"
+	ssh ${REMOTE_USER}@${1} "cd server; rm -rf *"
+}
+
+function removeRemoteJSPs {
+	# $1: ip address
+	echo "	removing remote JSPs"
+	ssh ${REMOTE_USER}@${1} "cd server; find . -name '*.jsp' -exec rm {} \;"
+}
+
+function touch500files
+{
+	(
+		cd $SERVER
+		# random might not be good
+		#find . -type f | perl -MList::Util=shuffle -e 'print shuffle(<STDIN>);' | tail -500 > /tmp/,touch500
+		find . -type f |  tail -500 > /tmp/,touch500
+		# Won't work if files haves spaces in their names
+		for n in `cat /tmp/,touch500` ; do
+			#echo touch $n
+			touch $n
+		done
+	)
+}
+
+function touch5percent
+{
+	(
+		cd $SERVER
+		# random might not be good
+		#find . -type f | perl -MList::Util=shuffle -e 'print shuffle(<STDIN>);' | tail -500 > /tmp/,touch500
+
+		all=`find . -type f | wc -l`
+		few=`expr ${all} / 20`
+		echo Touching ${few} files
+		find . -type f | tail -${few} > /tmp/,touch5percent
+		# Won't work if files haves spaces in their names
+		for n in `cat /tmp/,touch5percent` ; do
+			#echo touch $n
+			touch $n
+		done
+	)
+}
+
+function timeToTar
+{
+	(
+		cd $SERVER
+		time tar cf /dev/null .
+	)
+}
