@@ -202,7 +202,7 @@ public class FipList
 			if (pos < 0)
 				throw new FipCorruptionException(lineNo, "missing length");
 			str = line.substring(0, pos);
-			long length = Integer.parseInt(str);
+			long length;
 			try {
 				length = Long.parseLong(str);
 			} catch (NumberFormatException e) {
