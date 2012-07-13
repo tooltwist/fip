@@ -190,11 +190,17 @@ public class Fip
 			
 			for (FipFile f : filesAtSource.files())
 			{
+//if (f.getSourceRelativePath().indexOf("handler") > 0) {
+//int abc = 123;
+//}
 				f.setOp(Op.EXCLUDE); // Exclude it until told otherwise.
 				for (FipRule r : rules)
 				{
 					r.setRuleParametersForFile(f);
 				}
+if (f.getSourceRelativePath().indexOf("handler") > 0) {
+System.out.println("f:" + f.getDestinationRelativePath() + ", op:" + f.getOp().toString());
+}
 			}
 		}
 		if (debugMessages)

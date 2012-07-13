@@ -18,4 +18,8 @@ public class FipRule_ignore extends FipRule
 		if (pattern.matcher(relativePath).matches())
 			param.setOp(Op.IGNORE);
 	}
+	
+	public String toString() {
+		return this.getClass().getCanonicalName() + ": " + pattern;
+	}
 }

@@ -18,4 +18,8 @@ public class FipRule_dontInstall extends FipRule
 		if (pattern.matcher(relativePath).matches())
 			param.setOp(Op.EXCLUDE);
 	}
+	
+	public String toString() {
+		return this.getClass().getCanonicalName() + ": " + pattern;
+	}
 }

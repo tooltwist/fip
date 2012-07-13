@@ -18,5 +18,9 @@ public class FipRule_map extends FipRule
 		if (sourceRelativePath.equals(originalRelativePath))
 			param.setDestinationRelativePath(newRelativePath);
 	}
+	
+	public String toString() {
+		return this.getClass().getCanonicalName() + ": " + originalRelativePath + " -> " + newRelativePath;
+	}
 
 }

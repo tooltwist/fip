@@ -18,4 +18,8 @@ public class FipRule_include extends FipRule
 		if (pattern.matcher(relativePath).matches())
 			param.setOp(Op.INCLUDE);
 	}
+	
+	public String toString() {
+		return this.getClass().getCanonicalName() + ": " + pattern;
+	}
 }

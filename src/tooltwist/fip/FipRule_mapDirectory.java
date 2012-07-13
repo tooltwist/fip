@@ -26,4 +26,8 @@ public class FipRule_mapDirectory extends FipRule
 			param.setDestinationRelativePath(newRelativePath);
 		}
 	}
+	
+	public String toString() {
+		return this.getClass().getCanonicalName() + ": " + subPath + " -> " + newSubPath;
+	}
 }
