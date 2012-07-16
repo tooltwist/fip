@@ -198,7 +198,7 @@ public class Fip
 				{
 					r.setRuleParametersForFile(f);
 				}
-if (f.getSourceRelativePath().indexOf("handler") > 0) {
+if (f.getSourceRelativePath().indexOf("handler.xml") > 0) {
 System.out.println("f:" + f.getDestinationRelativePath() + ", op:" + f.getOp().toString());
 }
 			}
