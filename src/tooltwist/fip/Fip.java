@@ -119,7 +119,7 @@ import tooltwist.fip.FipBatchOfUpdates.BufferStatus;
 public class Fip
 {
 	public static byte MAJOR_VERSION_NUMBER = 0x01;
-	public static byte MINOR_VERSION_NUMBER = 0x02;	
+	public static byte MINOR_VERSION_NUMBER = 0x03;	
 	private Vector<FipRule> rules = new Vector<FipRule>();
 
 	/**
@@ -182,6 +182,7 @@ public class Fip
 
 		// Load existing definition from the source.
 //		System.out.println("\nClient list=");
+		System.out.println("Indexing source...");
 		FipList filesAtSource = source.askForFileList(false);
 
 		// Check the rules against each source file.
@@ -190,17 +191,11 @@ public class Fip
 			
 			for (FipFile f : filesAtSource.files())
 			{
-//if (f.getSourceRelativePath().indexOf("handler") > 0) {
-//int abc = 123;
-//}
 				f.setOp(Op.EXCLUDE); // Exclude it until told otherwise.
 				for (FipRule r : rules)
 				{
 					r.setRuleParametersForFile(f);
 				}
-if (f.getSourceRelativePath().indexOf("handler.xml") > 0) {
-System.out.println("f:" + f.getDestinationRelativePath() + ", op:" + f.getOp().toString());
-}
 			}
 		}
 		if (debugMessages)
@@ -210,13 +205,15 @@ System.out.println("f:" + f.getDestinationRelativePath() + ", op:" + f.getOp().t
 		}
 		
 		// Get the existing files at the destination
+		System.out.println("Indexing destination...");
 		FipList filesAtDestination = destination.askForFileList(true);
 		if (debugMessages)
 		{
 			String list = filesAtDestination.serialize(false);
 			System.out.println("Files at destination:\n" + list);
 		}
-		
+
+		System.out.println("Comparing...");
 		FipDeltaList deltaList = filesAtSource.getDelta(filesAtDestination);
 //		if (verbose || listOnly)
 		{
@@ -234,6 +231,7 @@ System.out.println("f:" + f.getDestinationRelativePath() + ", op:" + f.getOp().t
 //		String salt = deltaList.getInitialSalt();
 		
 		// Calculate the approximate total size of the updates
+		System.out.println("Calculating size...");
 		FipBufferCapacityCalculator bcc = new FipBufferCapacityCalculator();
 		long estimatedTotalSize = bcc.spaceRequiredAtStartOfBuffer();
 //int cnt = 1;
@@ -434,7 +432,7 @@ System.out.println("f:" + f.getDestinationRelativePath() + ", op:" + f.getOp().t
 			size += (mb - 1); // Round up
 			double num = ((double) size) / mb;
 			DecimalFormat format = new DecimalFormat("######0.00");
-			String str = format.format(num) + "Mb";
+			String str = format.format(num) + "mb";
 			return str;
 		}
 		else

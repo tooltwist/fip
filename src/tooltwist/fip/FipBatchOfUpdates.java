@@ -42,7 +42,7 @@ public class FipBatchOfUpdates
 	// Recommended
 	static int BUFFER_LENGTH = 50 * 1024 * 1024; // 50mb - absolute maximum file size.
 	static final int SMALL_ENOUGH_TO_PUT_BIG_FILE_ON_TOP = 100 * 1024; // If the amount in the buffer it's less than this, it's not really worth sending by itself.
-	static final int PREFERRED_MAX_TRANSMISSION = 1024*1024 * 2;	// 2mb - we'll try to keep the amount sent in each call to the server somewhere around this number.
+	static final int PREFERRED_MAX_TRANSMISSION = 1024*1024 * 8;	// 8mb - we'll try to keep the amount sent in each call to the server somewhere around this number.
 //	private static final int SMALL_ENOUGH_TO_PUT_BIG_FILE_ON_TOP = 10000;
 //	private static final int PREFERRED_MAX_TRANSMISSION = 100000;
 	protected static final byte FLAG_EXECUTABLE = 0x01;

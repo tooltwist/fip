@@ -12,7 +12,6 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -23,8 +22,6 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-
-import sun.misc.UUEncoder;
 
 
 public class FipHttpServerProxy extends FipServerProxy
@@ -44,11 +41,14 @@ public class FipHttpServerProxy extends FipServerProxy
 	{
 		String url = "http://" + host + ":" + port + "/getSourceUuid?sourcePath=" + this.getRoot();
 
+		// Set the timeout parameters
 		HttpClientParams params = new HttpClientParams();
 		params.setConnectionManagerTimeout(30000);
 		params.setSoTimeout(30000);
+		
+		// Send the request
 		HttpClient client = new HttpClient(params);
-		HttpConnectionManager connectionManager = client.getHttpConnectionManager();
+//		HttpConnectionManager connectionManager = client.getHttpConnectionManager();
 //		connectionManager.getParams().setSendBufferSize(50 * 1024);
 //		connectionManager.getParams().setReceiveBufferSize(50 * 1024);
 		GetMethod getMethod = new GetMethod(url);
@@ -98,9 +98,12 @@ public class FipHttpServerProxy extends FipServerProxy
 	{
 		String url = "http://" + host + ":" + port + "/startTransaction?sourceUuid=" + sourceUuid + "&destinationRoot=" + this.getRoot();
 
+		// Prepare the timeout parameters
 		HttpClientParams params = new HttpClientParams();
-		params.setConnectionManagerTimeout(30000);
-		params.setSoTimeout(30000);
+		params.setConnectionManagerTimeout(30 * 1000); // 30 seconds to connect
+		params.setSoTimeout(30 * 1000); // 30 seconds to start the transaction
+		
+		// Request the new transaction
 		HttpClient client = new HttpClient(params);
 		GetMethod getMethod = new GetMethod(url);
 		HttpMethodParams params2 = getMethod.getParams();
@@ -163,9 +166,12 @@ public class FipHttpServerProxy extends FipServerProxy
 	{
 		String url = "http://" + host + ":" + port + "/getFileList?path=" + this.getRoot() + "&isDestination=" + (isDestination?"Y":"N");
 
+		// Prepare timeouts
 		HttpClientParams params = new HttpClientParams();
-		params.setConnectionManagerTimeout(30000);
-		params.setSoTimeout(30000);
+		params.setConnectionManagerTimeout(30 * 1000); // 30 seconds
+		params.setSoTimeout(10 * 60 * 1000); // 10 minutes
+		
+		// Call the server
 		HttpClient client = new HttpClient(params);
 		GetMethod getMethod = new GetMethod(url);
 		HttpMethodParams params2 = getMethod.getParams();
@@ -199,7 +205,7 @@ public class FipHttpServerProxy extends FipServerProxy
 			    			continue;
 			    		
 			    		// Found the right entry, read it now.
-			    		byte[] buf = new byte[4096];
+			    		byte[] buf = new byte[256 * 1024];
 			    		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			    		for ( ; ; )
 			    		{
@@ -267,9 +273,14 @@ public class FipHttpServerProxy extends FipServerProxy
             };
             postMethod.setRequestEntity(new MultipartRequestEntity(parts, postMethod.getParams()));
             
+    		// Prepare timeouts
+    		HttpClientParams params = new HttpClientParams();
+    		params.setConnectionManagerTimeout(30 * 1000); // 30 seconds
+    		params.setSoTimeout(10 * 60 * 1000); // 10 minutes
+    		
             // Call the remote servlet
-            HttpClient client = new HttpClient();
-            client.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+            HttpClient client = new HttpClient(params);
+//            client.getHttpConnectionManager().getParams().setConnectionTimeout(3000);
             int statusCode = client.executeMethod(postMethod);
 
             // Check the reply
@@ -334,7 +345,7 @@ public class FipHttpServerProxy extends FipServerProxy
             };
             postMethod.setRequestEntity(new MultipartRequestEntity(parts, postMethod.getParams()));
             HttpClient client = new HttpClient();
-            client.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+            client.getHttpConnectionManager().getParams().setConnectionTimeout(30 * 1000);
             int statusCode = client.executeMethod(postMethod);
 
             if (statusCode != HttpStatus.SC_OK)

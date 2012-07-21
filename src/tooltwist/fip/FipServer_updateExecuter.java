@@ -117,22 +117,35 @@ public class FipServer_updateExecuter
 		expect(FipBatchOfUpdates.MAGIC_START_OF_TRANSFER_FILE, "Batch file corrupt");
 		byte major = getByte();
 		byte minor = getByte();
+		
+
 		if (major == 0 && minor == 1)
 		{
 			// Not supported any more (initial insecure test version)
 		}
-		else if (major == 1 && minor == 0)
+		
+		// Put old formats that are still supported in here
+		
+		
+//		else if (major == 1 && minor == 0)
+//		{
+//			return prepareUpdates_0_1(destinationRoot, destinationProperties, txId);
+//		}
+//		else if (major == 1 && minor == 2)
+//		{
+//			return prepareUpdates_0_1(destinationRoot, destinationProperties, txId);
+//		}
+		
+		// Increase the buffer size. All old formats are obsolete
+		else if (major == Fip.MAJOR_VERSION_NUMBER && minor == Fip.MINOR_VERSION_NUMBER)
 		{
-			return prepareUpdates_0_1(destinationRoot, destinationProperties, txId);
+			return prepareUpdates_1_3(destinationRoot, destinationProperties, txId);
 		}
-		else if (major == 1 && minor == 2)
-		{
-			return prepareUpdates_0_1(destinationRoot, destinationProperties, txId);
-		}
+		
 		throw new FipException("Unknown protocol version: " + major + "." + minor);
 	}
 
-	private FipInstallUpdatesStatus prepareUpdates_0_1(String destinationRoot, DestinationProperties destinationProperties, String txId) throws FipException
+	private FipInstallUpdatesStatus prepareUpdates_1_3(String destinationRoot, DestinationProperties destinationProperties, String txId) throws FipException
 	{
 		try {
 
