@@ -160,10 +160,10 @@ public class FipBatchOfUpdates
 		addToBuffer(MAGIC_BEFORE_FILE_CONTENTS);
 		FileInputStream is = new FileInputStream(file);
 //System.out.println("buf.length=" + buf.length + ", nextPos=" + nextPos + ", length=" + length);
-if (nextPos + length > buf.length) {
-	System.err.println("Buffer overrun");
-	int abc = 123;
-}
+//if (nextPos + length > buf.length) {
+//	System.err.println("Buffer overrun");
+//	int abc = 123;
+//}
 		if (is.read(buf, nextPos, length) != length)
 		{
 			throw new FipException("Error reading " + length + " bytes from: " + file.getAbsolutePath());

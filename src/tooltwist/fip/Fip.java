@@ -376,49 +376,47 @@ public class Fip
 		}
 	}
 
-	private void processCommit(String sourceUrl, String destinationUrl, String txId) throws FipException
-	{
-		FipServerProxy source = getServerProxy(sourceUrl);
-		FipServerProxy destination = getServerProxy(destinationUrl);
-		
-		// Verify the machines can talk:
-		// Get uuid from the source.
-		// Get uuid from the destination, and open a transaction (unless in listOnly mode).
-		String sourceUuid = source.askForUuid();
-		NewTransactionReply reply = destination.askForTransactionDetails(sourceUuid, txId);
-		String destinationUuid = reply.getDestinationUuid();
-//		String source reply.getSourceUuid();
-//		String txId = reply.gettxId();
-		String salt = reply.getSalt();
+//	private void processCommit(String sourceUrl, String destinationUrl, String txId) throws FipException
+//	{
+//		FipServerProxy source = getServerProxy(sourceUrl);
+//		FipServerProxy destination = getServerProxy(destinationUrl);
+//		
+//		// Verify the machines can talk:
+//		// Get uuid from the source.
+//		// Get uuid from the destination, and open a transaction (unless in listOnly mode).
+//		String sourceUuid = source.askForUuid();
+//		NewTransactionReply reply = destination.askForTransactionDetails(sourceUuid, txId);
+//		String destinationUuid = reply.getDestinationUuid();
+////		String source reply.getSourceUuid();
+////		String txId = reply.gettxId();
+//		String salt = reply.getSalt();
+//
+//		// Loop around, getting updates from the source and sending them to the destination, until there are none left
+//		FipRequestList requestList = new FipRequestList();
+//		long totalSent = 0;
+//		boolean areChanges = false;
+//		try {
+//			requestList.addRequestForCommit();
+//			processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, areChanges);
+//		}
+//		catch (Exception e)
+//		{
+//			// The commit probably failed.
+//			if (e instanceof FipException)
+//				throw (FipException) e;
+//			FipException fipException = new FipException("The commit appears to have failed: " + e.toString());
+//			fipException.setStackTrace(e.getStackTrace());
+//			throw fipException;
+//		}
+//	}
 
-		// Loop around, getting updates from the source and sending them to the destination, until there are none left
-		FipRequestList requestList = new FipRequestList();
-		long totalSent = 0;
-		boolean areChanges = false;
-		try {
-			requestList.addRequestForCommit();
-			processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, areChanges);
-		}
-		catch (Exception e)
-		{
-			// The commit probably failed.
-			if (e instanceof FipException)
-				throw (FipException) e;
-			FipException fipException = new FipException("The commit appears to have failed: " + e.toString());
-			fipException.setStackTrace(e.getStackTrace());
-			throw fipException;
-		}
-	}
-
-	private void processAbort(String destinationUrl)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+//	private void processAbort(String destinationUrl)
+//	{
+//		
+//	}
 
 	private void processStatusCheck(String destinationUrl)
 	{
-		// TODO Auto-generated method stub
 		
 	}
 

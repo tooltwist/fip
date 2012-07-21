@@ -1,7 +1,6 @@
 package tooltwist.fip;
 
 import java.io.File;
-import java.io.FilePermission;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
@@ -36,7 +35,7 @@ public class DestinationProperties
 	private String preCommitCommand;
 	private String postCommitCommand;
 	private CommitMode commitMode = CommitMode.COMMIT_AS_A_TRANSACTION;
-	private Vector<Pattern> protectPatterns = new Vector();
+	private Vector<Pattern> protectPatterns = new Vector<Pattern>();
 
 	public DestinationProperties(String destinationRoot, String ipaddr) throws FipException
 	{

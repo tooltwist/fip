@@ -3,15 +3,8 @@ package tooltwist.fip;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.AlgorithmParameters;
 import java.util.Date;
 import java.util.Random;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-
-import org.apache.log4j.helpers.RelativeTimeDateFormat;
 
 import tooltwist.fip.FipRequest.RequestType;
 

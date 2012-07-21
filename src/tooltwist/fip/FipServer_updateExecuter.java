@@ -641,22 +641,22 @@ public class FipServer_updateExecuter
 //			params.insertElementAt("/c", 1);
 //			params.insertElementAt("convert", 2);
 			
-			errorFile = "c:\\WbdImageMagickError.txt";
+			errorFile = "c:\\fipServerError.txt";
 		}
 		else
 		{
 			/*
 			 * Non-windows (OSX, UNIX, LINUX)
 			 */
-			errorFile = "/tmp/WbdImageMagickError.txt";
+			errorFile = "/tmp/fipServerError.txt";
 		}
 		
 //		String[] command = (String[]) params.toArray(new String[params.size()]);
 		// Nice debug message
-		if (1 == 1)
-		{
+//		if (1 == 1)
+//		{
 			logger.debug("Running: " + command);
-		}
+//		}
 
 		// Start the command
 		Process proc;
