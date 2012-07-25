@@ -331,6 +331,7 @@ System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInB
 //System.out.println("Total sent so far = "+ totalSent);
 
 					bcc.resetCounter();
+					bcc.willItFit(spaceRequiredInBuffer); // We already know the answer, but this is needed to increment the buffer position.
 System.out.println("\n\n\n\n\n-----------------------------------------------------------------------------------------\n\n\n\n\n");
 					break;
 					
