@@ -320,6 +320,7 @@ public class Fip
 //System.out.println("Total sent so far = "+ totalSent);
 
 					bcc.resetCounter();
+					bcc.willItFit(spaceRequiredInBuffer); // We already know the answer, but this is needed to increment the buffer position.
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:
@@ -345,6 +346,12 @@ public class Fip
 					totalSent += spaceRequiredInBuffer;
 					cntDelete++;
 				}
+				else
+				{
+					// This should not happen
+					System.out.println("WHAT TYPE IS THIS?");
+				}
+
 			}
 			
 			requestList.addRequestForEndOfTransactionMarker();
