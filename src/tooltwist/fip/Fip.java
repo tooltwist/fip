@@ -316,7 +316,7 @@ System.out.println("  will not fit");
 System.out.println("\n\n\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n\n");
 philDeltaCount = 1;
 System.out.println("\n\n" + philDeltaCount + ": "+sourceRelativePath);				
-System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size() + "\n\n\n");				
+System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size() + "\n\n\n");				
 					processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, false);
 					cntInstall = 0;
 					cntDelete = 0;
