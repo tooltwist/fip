@@ -326,6 +326,7 @@ System.out.println(philDeltaCount + ": start="+totalSent + ", size= " + spaceReq
 
 					bcc.resetCounter();
 philDeltaCount = 0;
+System.out.println("-----------------------------------------------------------------------------------------");
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:
