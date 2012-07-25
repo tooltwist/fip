@@ -293,6 +293,7 @@ philDeltaCount++;
 				// If this update won't fit in the buffer, send what we have so far.
 				BufferStatus willItFit = bcc.willItFit(spaceRequiredInBuffer);
 
+System.out.println(philDeltaCount + ": "+sourceRelativePath);				
 System.out.println(philDeltaCount + ": start="+totalSent + ", size= " + spaceRequiredInBuffer);				
 //zzz += spaceRequiredInBuffer;
 //System.out.println("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());

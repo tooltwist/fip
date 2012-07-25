@@ -155,6 +155,7 @@ public class FipBatchOfUpdates
 		addToBuffer(flags);
 		// Add the file length
 		int length = (int) file.length();
+System.out.println("  " + file.getName() + "\n  " + nextPos + ", " + length);
 		addFileLengthToBuffer(length);
 		// Add the file contents
 		addToBuffer(MAGIC_BEFORE_FILE_CONTENTS);
@@ -164,7 +165,6 @@ public class FipBatchOfUpdates
 //	System.err.println("Buffer overrun");
 //	int abc = 123;
 //}
-System.out.println("  " + nextPos + ", " + length);
 		if (is.read(buf, nextPos, length) != length)
 		{
 			throw new FipException("Error reading " + length + " bytes from: " + file.getAbsolutePath());
