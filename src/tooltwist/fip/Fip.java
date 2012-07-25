@@ -270,12 +270,14 @@ public class Fip
 //cnt = 1;
 		boolean areChanges = false;
 		try {
+int philDeltaCount = 0;
 			bcc = new FipBufferCapacityCalculator();
 			int cntInstall = 0;
 			int cntDelete = 0;
 			int cntBundle = 1;
 			for (FipDelta d : deltaList.list())
 			{
+philDeltaCount++;
 				String sourceRelativePath = d.getSourceRelativePath();
 				String destinationRelativePath = d.getDestinationRelativePath();
 				long fileLen = d.getFilesize();
@@ -290,6 +292,8 @@ public class Fip
 
 				// If this update won't fit in the buffer, send what we have so far.
 				BufferStatus willItFit = bcc.willItFit(spaceRequiredInBuffer);
+
+System.out.println(philDeltaCount + ": start="+totalSent + ", size= " + spaceRequiredInBuffer);				
 //zzz += spaceRequiredInBuffer;
 //System.out.println("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());
 				switch (willItFit)
@@ -320,6 +324,7 @@ public class Fip
 //System.out.println("Total sent so far = "+ totalSent);
 
 					bcc.resetCounter();
+philDeltaCount = 0;
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:

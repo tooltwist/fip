@@ -164,6 +164,7 @@ public class FipBatchOfUpdates
 //	System.err.println("Buffer overrun");
 //	int abc = 123;
 //}
+System.out.println("  " + nextPos + ", " + length);
 		if (is.read(buf, nextPos, length) != length)
 		{
 			throw new FipException("Error reading " + length + " bytes from: " + file.getAbsolutePath());

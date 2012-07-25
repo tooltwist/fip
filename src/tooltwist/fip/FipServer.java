@@ -54,13 +54,13 @@ public class FipServer
 		dir.mkdir();
 
 		// Generate a random number for the salt
-		long aHardToPredictNumber = dir.getFreeSpace();
+		long aHardToPredictNumber = now; //dir.getFreeSpace();
 		long tmp = now + aHardToPredictNumber;
 		Random random = new Random(tmp);
 		String salt = "" + random.nextLong();
 		
 		// Decide how long this transaction has to complete
-		long expires = now + (1000 * 60 * 60 * 4); // Two hours 
+		long expires = now + (1000 * 60 * 60 * 4); // 4 hours 
 
 		// Create a transaction properties file
 		TransactionProperties.createPropertiesFile(destinationRoot, txId, TransactionStatus.PREPARING, salt, expires, ipaddr);
@@ -205,8 +205,11 @@ public class FipServer
 
 		// Read the updates
 		FipBatchOfUpdates updateList = new FipBatchOfUpdates();
+int philCnt = 0;
 		for (FipRequest request : requestList.list())
 		{
+philCnt++;
+System.out.println(philCnt + "==> ");
 			RequestType type = request.getType();
 			if (type == RequestType.DELETE)
 			{
