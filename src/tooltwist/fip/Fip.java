@@ -270,14 +270,12 @@ public class Fip
 //cnt = 1;
 		boolean areChanges = false;
 		try {
-int philDeltaCount = 0;
 			bcc = new FipBufferCapacityCalculator();
 			int cntInstall = 0;
 			int cntDelete = 0;
 			int cntBundle = 1;
 			for (FipDelta d : deltaList.list())
 			{
-philDeltaCount++;
 				String sourceRelativePath = d.getSourceRelativePath();
 				String destinationRelativePath = d.getDestinationRelativePath();
 				long fileLen = d.getFilesize();
@@ -289,9 +287,6 @@ philDeltaCount++;
 				else if (d.getType() == Type.DELETE)
 					spaceRequiredInBuffer = bcc.spaceRequiredForDelete(destinationRelativePath);
 
-System.out.println(philDeltaCount + ": "+sourceRelativePath);				
-System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
-
 				// If this update won't fit in the buffer, send what we have so far.
 				BufferStatus willItFit = bcc.willItFit(spaceRequiredInBuffer);
 
@@ -300,12 +295,10 @@ System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInB
 				switch (willItFit)
 				{
 				case WILL_FIT:
-System.out.println("  will fit");
 					// Cool.
 					break;
 					
 				case WILL_NOT_FIT:
-System.out.println("  will not fit");
 					// This file won't fit on top of what's already there, so send the buffer, then add it.
 					// Get a list of updates from the source.
 					// Add on the deletes.
@@ -313,10 +306,6 @@ System.out.println("  will not fit");
 //					int usedInThisBundle = bcc.getSpaceUsed();
 					int used = bcc.getSpaceUsed();
 					System.out.print("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = " + cntInstall + " installs, " + cntDelete + " deletes)");
-System.out.println("\n\n\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n\n");
-philDeltaCount = 1;
-System.out.println("\n\n" + philDeltaCount + ": "+sourceRelativePath);				
-System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size() + "\n\n\n");				
 					processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, false);
 					cntInstall = 0;
 					cntDelete = 0;
@@ -332,11 +321,9 @@ System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInB
 
 					bcc.resetCounter();
 					bcc.willItFit(spaceRequiredInBuffer); // We already know the answer, but this is needed to increment the buffer position.
-System.out.println("\n\n\n\n\n-----------------------------------------------------------------------------------------\n\n\n\n\n");
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:
-System.out.println("  bigger than buffer");
 					// This file can never be sent - bomb out
 					throw new FipException("File is too large to be downloaded: " + sourceRelativePath);
 				}
@@ -344,7 +331,6 @@ System.out.println("  bigger than buffer");
 				// Now add the operation to the buffer
 				if (d.getType() == Type.NEW || d.getType() == Type.CHANGE)
 				{
-System.out.println("  new or change");					
 					requestList.addRequestForInstall(sourceRelativePath, destinationRelativePath);
 					areChanges = true;
 					totalSent += spaceRequiredInBuffer;
@@ -352,7 +338,6 @@ System.out.println("  new or change");
 				}
 				else if (d.getType() == Type.DELETE)
 				{
-System.out.println("  delete");	
 					//NOTE: TO BE SECURE, THIS DELETE MUST BE ADDED TO THE INSTRUCTIONS FROM THE SOURCE SERVER. SO:
 					// 1. THIS PROGRAM MUST SEND A REQUEST TO THE SOURCE SERVER TO ADD THE DELETE COMMAND, SIMILAR TO THE INSTALL OPERATIONS.
 					// 2. THE SOURCE SHOULD CONFIRM THAT THE FILE HAS ACTUALLY BEEN DELETED.
@@ -363,7 +348,8 @@ System.out.println("  delete");
 				}
 				else
 				{
-System.out.println("WHAT TYPE IS THIS?");
+					// This should not happen
+					System.out.println("WHAT TYPE IS THIS?");
 				}
 
 			}

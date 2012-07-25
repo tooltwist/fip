@@ -205,11 +205,9 @@ public class FipServer
 
 		// Read the updates
 		FipBatchOfUpdates updateList = new FipBatchOfUpdates();
-int philCnt = 0;
 		for (FipRequest request : requestList.list())
 		{
-philCnt++;
-System.out.println(philCnt + "==> ");
+
 			RequestType type = request.getType();
 			if (type == RequestType.DELETE)
 			{
