@@ -17,7 +17,7 @@ System.out.println("  -- willItFit? " + spaceUsed + " + " + requiredSpaceInBuffe
 		
 		if (requiredSpaceInBuffer >= FipBatchOfUpdates.BUFFER_LENGTH)
 		{
-System.out.println("    X => " + requiredSpaceInBuffer);
+System.out.println("    X => " + spaceUsed);
 			return BufferStatus.IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER;
 		}
 		
@@ -26,7 +26,7 @@ System.out.println("    X => " + requiredSpaceInBuffer);
 		{
 			// Fits within the preferred size, and there may be room for more.
 			spaceUsed += requiredSpaceInBuffer;
-System.out.println("    A => " + requiredSpaceInBuffer);
+System.out.println("    A => " + spaceUsed);
 			return BufferStatus.WILL_FIT;
 		}
 		else
@@ -37,13 +37,13 @@ System.out.println("    A => " + requiredSpaceInBuffer);
 System.out.println("  *** A LITTLE BIT TOO BIG");
 				// Larger than the preferred size, but not by much. This will be the last one in this transfer.
 				spaceUsed += requiredSpaceInBuffer;
-System.out.println("    B => " + requiredSpaceInBuffer);
+System.out.println("    B => " + spaceUsed);
 				return BufferStatus.WILL_FIT;
 			}
 			else
 			{
 				// A big too big. Send it in another transfer.
-System.out.println("    C => " + requiredSpaceInBuffer);
+System.out.println("    C => " + spaceUsed);
 				return BufferStatus.WILL_NOT_FIT;
 			}
 		}

@@ -289,12 +289,12 @@ philDeltaCount++;
 				else if (d.getType() == Type.DELETE)
 					spaceRequiredInBuffer = bcc.spaceRequiredForDelete(destinationRelativePath);
 
+System.out.println(philDeltaCount + ": "+sourceRelativePath);				
+System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
 
 				// If this update won't fit in the buffer, send what we have so far.
 				BufferStatus willItFit = bcc.willItFit(spaceRequiredInBuffer);
 
-System.out.println(philDeltaCount + ": "+sourceRelativePath);				
-System.out.println("  start="+bcc.getSpaceUsed() + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
 //zzz += spaceRequiredInBuffer;
 //System.out.println("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());
 				switch (willItFit)
