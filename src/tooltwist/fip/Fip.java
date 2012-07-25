@@ -343,6 +343,7 @@ System.out.println("  bigger than buffer");
 				// Now add the operation to the buffer
 				if (d.getType() == Type.NEW || d.getType() == Type.CHANGE)
 				{
+System.out.println("  new or change");					
 					requestList.addRequestForInstall(sourceRelativePath, destinationRelativePath);
 					areChanges = true;
 					totalSent += spaceRequiredInBuffer;
@@ -350,6 +351,7 @@ System.out.println("  bigger than buffer");
 				}
 				else if (d.getType() == Type.DELETE)
 				{
+System.out.println("  delete");	
 					//NOTE: TO BE SECURE, THIS DELETE MUST BE ADDED TO THE INSTRUCTIONS FROM THE SOURCE SERVER. SO:
 					// 1. THIS PROGRAM MUST SEND A REQUEST TO THE SOURCE SERVER TO ADD THE DELETE COMMAND, SIMILAR TO THE INSTALL OPERATIONS.
 					// 2. THE SOURCE SHOULD CONFIRM THAT THE FILE HAS ACTUALLY BEEN DELETED.
@@ -358,6 +360,11 @@ System.out.println("  bigger than buffer");
 					totalSent += spaceRequiredInBuffer;
 					cntDelete++;
 				}
+				else
+				{
+System.out.println("WHAT TYPE IS THIS?");
+				}
+
 			}
 			
 			requestList.addRequestForEndOfTransactionMarker();
