@@ -29,6 +29,7 @@ public class FipBufferCapacityCalculator
 			// It won't fit in the preferred size.
 			if (spaceUsed < FipBatchOfUpdates.SMALL_ENOUGH_TO_PUT_BIG_FILE_ON_TOP && newLength < FipBatchOfUpdates.BUFFER_LENGTH)
 			{
+System.out.println("  *** A LITTLE BIT TOO BIG");
 				// Larger than the preferred size, but not by much. This will be the last one in this transfer.
 				spaceUsed += requiredSpaceInBuffer;
 				return BufferStatus.WILL_FIT;
