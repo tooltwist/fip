@@ -294,7 +294,7 @@ philDeltaCount++;
 				BufferStatus willItFit = bcc.willItFit(spaceRequiredInBuffer);
 
 System.out.println(philDeltaCount + ": "+sourceRelativePath);				
-System.out.println(philDeltaCount + ": start="+totalSent + ", size= " + spaceRequiredInBuffer);				
+System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
 //zzz += spaceRequiredInBuffer;
 //System.out.println("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());
 				switch (willItFit)
@@ -311,6 +311,7 @@ System.out.println(philDeltaCount + ": start="+totalSent + ", size= " + spaceReq
 //					int usedInThisBundle = bcc.getSpaceUsed();
 					int used = bcc.getSpaceUsed();
 					System.out.print("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = " + cntInstall + " installs, " + cntDelete + " deletes)");
+System.out.println("\n\n\n*********************************************************************************************\n\n");
 					processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, false);
 					cntInstall = 0;
 					cntDelete = 0;
@@ -326,7 +327,7 @@ System.out.println(philDeltaCount + ": start="+totalSent + ", size= " + spaceReq
 
 					bcc.resetCounter();
 philDeltaCount = 0;
-System.out.println("-----------------------------------------------------------------------------------------");
+System.out.println("\n\n\n\n\n-----------------------------------------------------------------------------------------\n\n\n\n\n");
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:
