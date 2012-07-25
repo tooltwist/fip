@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.ConnectException;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -142,6 +143,12 @@ public class FipHttpServerProxy extends FipServerProxy
 		    	}
 				
 			}
+	    } catch (ConnectException ex) {
+	    	String msg = "Could not connect to the remote server. Is it running on the specified machine/port?";
+			System.out.println("ERROR: " + msg);
+	        FipException exception = new FipException(msg);
+	        exception.setStackTrace(ex.getStackTrace());
+	        throw exception;
 	    } catch (Exception ex) {
 	    	System.out.println("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
 	        ex.printStackTrace();

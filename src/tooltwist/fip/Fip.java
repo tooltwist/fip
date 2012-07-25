@@ -300,10 +300,12 @@ System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + "
 				switch (willItFit)
 				{
 				case WILL_FIT:
+System.out.println("will fit");
 					// Cool.
 					break;
 					
 				case WILL_NOT_FIT:
+System.out.println("will not fit");
 					// This file won't fit on top of what's already there, so send the buffer, then add it.
 					// Get a list of updates from the source.
 					// Add on the deletes.
@@ -326,11 +328,14 @@ System.out.println("\n\n\n******************************************************
 //System.out.println("Total sent so far = "+ totalSent);
 
 					bcc.resetCounter();
-philDeltaCount = 0;
 System.out.println("\n\n\n\n\n-----------------------------------------------------------------------------------------\n\n\n\n\n");
+philDeltaCount = 1;
+System.out.println("\n\n" + philDeltaCount + ": "+sourceRelativePath);				
+System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:
+System.out.println("bigger than buffer");
 					// This file can never be sent - bomb out
 					throw new FipException("File is too large to be downloaded: " + sourceRelativePath);
 				}
