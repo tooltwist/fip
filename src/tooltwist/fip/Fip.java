@@ -297,15 +297,17 @@ System.out.println(philDeltaCount + ": "+sourceRelativePath);
 System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
 //zzz += spaceRequiredInBuffer;
 //System.out.println("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());
+System.out.println("A: "+sourceRelativePath);				
 				switch (willItFit)
 				{
 				case WILL_FIT:
-System.out.println("will fit");
+System.out.println("  will fit");
 					// Cool.
 					break;
 					
 				case WILL_NOT_FIT:
-System.out.println("will not fit");
+System.out.println("  will not fit");
+System.out.println("B: "+sourceRelativePath);				
 					// This file won't fit on top of what's already there, so send the buffer, then add it.
 					// Get a list of updates from the source.
 					// Add on the deletes.
@@ -313,8 +315,10 @@ System.out.println("will not fit");
 //					int usedInThisBundle = bcc.getSpaceUsed();
 					int used = bcc.getSpaceUsed();
 					System.out.print("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = " + cntInstall + " installs, " + cntDelete + " deletes)");
-System.out.println("\n\n\n*********************************************************************************************\n\n");
+System.out.println("C: "+sourceRelativePath);				
+System.out.println("\n\n\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n\n");
 					processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, false);
+System.out.println("D: "+sourceRelativePath);				
 					cntInstall = 0;
 					cntDelete = 0;
 					
@@ -326,6 +330,7 @@ System.out.println("\n\n\n******************************************************
 					if (verbose)
 						System.out.println();
 //System.out.println("Total sent so far = "+ totalSent);
+System.out.println("E: "+sourceRelativePath);				
 
 					bcc.resetCounter();
 System.out.println("\n\n\n\n\n-----------------------------------------------------------------------------------------\n\n\n\n\n");
@@ -335,7 +340,7 @@ System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + "
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:
-System.out.println("bigger than buffer");
+System.out.println("  bigger than buffer");
 					// This file can never be sent - bomb out
 					throw new FipException("File is too large to be downloaded: " + sourceRelativePath);
 				}
