@@ -297,7 +297,6 @@ System.out.println(philDeltaCount + ": "+sourceRelativePath);
 System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
 //zzz += spaceRequiredInBuffer;
 //System.out.println("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());
-System.out.println("A: "+sourceRelativePath);				
 				switch (willItFit)
 				{
 				case WILL_FIT:
@@ -307,7 +306,6 @@ System.out.println("  will fit");
 					
 				case WILL_NOT_FIT:
 System.out.println("  will not fit");
-System.out.println("B: "+sourceRelativePath);				
 					// This file won't fit on top of what's already there, so send the buffer, then add it.
 					// Get a list of updates from the source.
 					// Add on the deletes.
@@ -315,10 +313,11 @@ System.out.println("B: "+sourceRelativePath);
 //					int usedInThisBundle = bcc.getSpaceUsed();
 					int used = bcc.getSpaceUsed();
 					System.out.print("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = " + cntInstall + " installs, " + cntDelete + " deletes)");
-System.out.println("C: "+sourceRelativePath);				
 System.out.println("\n\n\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n\n");
+philDeltaCount = 1;
+System.out.println("\n\n" + philDeltaCount + ": "+sourceRelativePath);				
+System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size() + "\n\n\n");				
 					processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, false);
-System.out.println("D: "+sourceRelativePath);				
 					cntInstall = 0;
 					cntDelete = 0;
 					
@@ -330,13 +329,9 @@ System.out.println("D: "+sourceRelativePath);
 					if (verbose)
 						System.out.println();
 //System.out.println("Total sent so far = "+ totalSent);
-System.out.println("E: "+sourceRelativePath);				
 
 					bcc.resetCounter();
 System.out.println("\n\n\n\n\n-----------------------------------------------------------------------------------------\n\n\n\n\n");
-philDeltaCount = 1;
-System.out.println("\n\n" + philDeltaCount + ": "+sourceRelativePath);				
-System.out.println("  start="+totalSent + ", size= " + spaceRequiredInBuffer + " listSize=" + requestList.size());				
 					break;
 					
 				case IMPOSSIBLE_TO_SEND_BIGGER_THAN_BUFFER:
