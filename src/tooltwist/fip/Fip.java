@@ -1,9 +1,12 @@
 package tooltwist.fip;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.Vector;
 import java.util.zip.CRC32;
@@ -164,10 +167,15 @@ public class Fip
 		rules.add(rule);
 	}
 
-	public void installFiles(String sourceUrl, String destinationUrl, boolean debugMessages, boolean verbose, boolean listOnly) throws FipException, IOException, FipCorruptionException
+	public void installFiles(String sourceUrl, String destinationUrl, String rulesFile, boolean debugMessages, boolean verbose, boolean listOnly) throws FipException, IOException, FipCorruptionException
 	{
 		FipServerProxy source = getServerProxy(sourceUrl);
 		FipServerProxy destination = getServerProxy(destinationUrl);
+		
+		// Load the rules
+		if (rulesFile != null && !rulesFile.equals("")) {
+			loadRules(this, rulesFile);
+		}
 		
 		// Verify the machines can talk:
 		// Get uuid from the source.
@@ -380,6 +388,83 @@ public class Fip
 			FipException fipException = new FipException("Need to abort transaction: " + e.toString());
 			fipException.setStackTrace(e.getStackTrace());
 			throw fipException;
+		}
+	}
+
+	private void loadRules(Fip fip, String rulesFile) throws FipException {
+		
+		try{
+
+//			FileInputStream fstream = new FileInputStream("myfile.txt");
+//			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(rulesFile)));
+			String line;
+			for (int lineNo = 1; (line = br.readLine()) != null; lineNo++) {
+				line = line.trim();
+				if (line.equals(""))
+					continue;
+				String[] strings = line.split("\\s+");
+				if (strings[0].startsWith("#"))
+					continue;
+				
+				if (strings[0].equals("+") || strings[0].toLowerCase().equals("include")) {
+					// + <pattern>
+					// Install
+					if (strings.length != 2)
+						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
+					System.out.println("     => install " + strings[1]);
+					fip.install(strings[1]);
+				}
+				else if (strings[0].equals("-") || strings[0].toLowerCase().equals("exclude")) {
+					
+					// - <pattern>
+					// Don't install
+					if (strings.length != 2)
+						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
+					String pattern = strings[1];
+					System.out.println("     => don't install " + strings[1]);
+					fip.dontInstall(pattern);
+				}
+				else if (strings[0].equals("i") || strings[0].toLowerCase().equals("ignore")) {
+					
+					// - <pattern>
+					// Don't install
+					if (strings.length != 2)
+						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
+					String pattern = strings[1];
+					System.out.println("     => ignore " + strings[1]);
+					fip.ignore(pattern);
+				}
+				else if (strings[0].equals("m") || strings[0].toLowerCase().equals("map")) {
+					
+					// m <from> <to>
+					// Mapping
+					if (strings.length != 3)
+						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
+					String from = strings[1];
+					String to = strings[2];
+					System.out.println("     => map " + strings[1] + " to " + strings[2]);
+					fip.map(from, to);
+				}
+				else if (strings[0].equals("d")) {
+					
+					// d <from> <to>
+					// Map directory
+					if (strings.length != 3)
+						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
+					String from = strings[1];
+					String to = strings[2];
+					System.out.println("     => map directory " + strings[1] + " to " + strings[2]);
+					fip.mapDirectory(from, to);
+				} else {
+					throw new FipException("Unknown instruction in rules file: line " + lineNo + ": " + line);
+				}
+			}
+
+			br.close();
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			throw new FipException("Error: " + e.getMessage());
 		}
 	}
 
@@ -694,12 +779,25 @@ public class Fip
 //		boolean abortFlag = false;
 //		boolean commitFlag = false;
 		boolean debugMessages = false;
+		String rulesFile = null;
 		int numArgs = args.length;
 		int cntarg = 0;
-		int cntExcusiveArgs = 0;
+		int cntExclusiveArgs = 0;
 		for ( ; cntarg < numArgs && args[cntarg].startsWith("-"); cntarg++)
 		{
 			String arg = args[cntarg];
+			
+			if (arg.equals("-r")) {// Rules file
+				cntarg++;
+				if (cntarg >= args.length)
+					usage();
+				rulesFile = args[cntarg];
+				continue;
+			}
+
+			
+			
+			
 			for (int j = 1; j < arg.length(); j++) {
                 char flag = arg.charAt(j);
                 switch (flag) {
@@ -725,7 +823,7 @@ public class Fip
 //                    break;
                 case 'i':
                     indexOnly = true;
-                    cntExcusiveArgs++;
+                    cntExclusiveArgs++;
                     break;
                 case 'V':
    					System.out.println("FIP version " + MAJOR_VERSION_NUMBER + "." + MINOR_VERSION_NUMBER);
@@ -739,8 +837,8 @@ public class Fip
 		}
 		int numRemainingArgs = numArgs - cntarg;
 		if (listOnly || preparedIndex) // implies normal install mode
-			cntExcusiveArgs++;
-		if (cntExcusiveArgs > 1)
+			cntExclusiveArgs++;
+		if (cntExclusiveArgs > 1)
 			usage();
 		
 //		// Check that we only have one or none of status, and abort
@@ -839,7 +937,7 @@ public class Fip
 	//fip.map("production/tooltwist.conf", "tooltwist.conf");
 	//fip.map("production/wbd.conf", "files/webdesign/config/wbd/wbd.conf");
 
-				fip.installFiles(sourceUrl, destinationUrl, debugMessages, verbose, listOnly);
+				fip.installFiles(sourceUrl, destinationUrl, rulesFile, debugMessages, verbose, listOnly);
 				System.out.println("Finished");
 			}
 
