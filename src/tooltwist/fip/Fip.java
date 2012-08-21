@@ -407,7 +407,7 @@ public class Fip
 				if (strings[0].startsWith("#"))
 					continue;
 				
-				if (strings[0].equals("+") || strings[0].toLowerCase().equals("include")) {
+				if (strings[0].equals("+") || strings[0].toLowerCase().equals("install") || strings[0].toLowerCase().equals("include")) {
 					// + <pattern>
 					// Install
 					if (strings.length != 2)
