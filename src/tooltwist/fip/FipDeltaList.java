@@ -38,15 +38,17 @@ public class FipDeltaList
 				String sourceRelativePath = delta.getSourceRelativePath();
 				String destinationRelativePath = delta.getDestinationRelativePath();
 				String code = delta.getType().getCode();
-				if (code.equals("N"))
+				if (code.equals("N")) {
 					buf.append("   new: " + sourceRelativePath);
-				else if (code.equals("D")) {
-					// This inaccurately reports protected files at the destination will be deleted
+				} else if (code.equals("D")) {
+					// Phil, 2012-08-31: This inaccurately reported protected files at the destination will be deleted
+					continue;
 					//buf.append("delete: " + sourceRelativePath);
-				} else if (code.equals("C"))
+				} else if (code.equals("C")) {
 					buf.append("change: " + sourceRelativePath);
-				else
+				} else {
 					buf.append("      " + code + ": " + sourceRelativePath);
+				}
 					
 //				buf.append(delta.getType().getCode() + ":" + delta.getFilesize() + ":" + sourceRelativePath);
 				if ( !sourceRelativePath.equals(destinationRelativePath))
