@@ -40,9 +40,10 @@ public class FipDeltaList
 				String code = delta.getType().getCode();
 				if (code.equals("N"))
 					buf.append("   new: " + sourceRelativePath);
-				else if (code.equals("D"))
-					buf.append("delete: " + sourceRelativePath);
-				else if (code.equals("C"))
+				else if (code.equals("D")) {
+					// This inaccurately reports protected files at the destination will be deleted
+					//buf.append("delete: " + sourceRelativePath);
+				} else if (code.equals("C"))
 					buf.append("change: " + sourceRelativePath);
 				else
 					buf.append("      " + code + ": " + sourceRelativePath);
