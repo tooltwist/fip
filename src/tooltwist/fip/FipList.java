@@ -180,40 +180,41 @@ public class FipList
 		FipList fipList = new FipList();
 		for (int lineNo = 1; ; lineNo++)
 		{
-			String line = in.readLine();
-			if (line == null)
+			String fullLine = in.readLine();
+			if (fullLine == null)
 				break;
+			String line = fullLine;
 
 			// Get lastModified
 			int pos = line.indexOf(":");
 			if (pos < 0)
-				throw new FipCorruptionException(lineNo, "missing lastModified");
+				throw new FipCorruptionException(lineNo, "missing lastModified: " + fullLine);
 			String str = line.substring(0, pos);
 			long lastModified;
 			try {
 				lastModified = Long.parseLong(str);
 			} catch (NumberFormatException e) {
-				throw new FipCorruptionException(lineNo, "non numeric value for lastModified");
+				throw new FipCorruptionException(lineNo, "non numeric value for lastModified: " + fullLine);
 			}
 			line = line.substring(pos + 1);
 
 			// Get the length
 			pos = line.indexOf(":");
 			if (pos < 0)
-				throw new FipCorruptionException(lineNo, "missing length");
+				throw new FipCorruptionException(lineNo, "missing length: " + fullLine);
 			str = line.substring(0, pos);
 			long length;
 			try {
 				length = Long.parseLong(str);
 			} catch (NumberFormatException e) {
-				throw new FipCorruptionException(lineNo, "non numeric value for length");
+				throw new FipCorruptionException(lineNo, "non numeric value for length: " + fullLine);
 			}
 			line = line.substring(pos + 1);
 
 			// Get the Checksum
 			pos = line.indexOf(":");
 			if (pos < 0)
-				throw new FipCorruptionException(lineNo, "missing relative path");
+				throw new FipCorruptionException(lineNo, "missing relative path: " + fullLine);
 			String checksum = line.substring(0, pos);
 			
 			// Get the name. This must be at the end, because it might contain a colon.
