@@ -212,6 +212,7 @@ public class Fip
 		if (debugMessages)
 		{
 			String list = filesAtSource.serialize(true);
+			logger.info("Files at source:\n" + list);
 		}
 		
 		// Get the existing files at the destination
@@ -434,7 +435,6 @@ public class Fip
 					if (strings.length != 2)
 						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
 					String pattern = strings[1];
-					System.out.println("     => ignore " + strings[1]);
 					logger.info("     => ignore " + strings[1]);
 					fip.ignore(pattern);
 				}
@@ -719,6 +719,7 @@ public class Fip
 		FipList list = FipList.loadListFromFile(rootDir);
 		long time2 = System.currentTimeMillis();
 		long duration1 = time2 - time1;
+		logger.info(" - loaded " + list.numFiles() + " files in " + duration1 + "ms.");
 		logger.info("Updating index...");
 		long time3 = System.currentTimeMillis();
 		list.syncWithRealFiles(rootDir);

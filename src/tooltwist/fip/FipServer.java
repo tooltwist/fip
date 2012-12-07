@@ -150,6 +150,7 @@ public class FipServer
 	public void destination_installBatchOfFiles(String destinationRoot, String txId, FipBatchOfUpdates updateBuffer, String ipaddr) throws FipException
 	{
 		log(destinationRoot, true, "installBatchOfFiles (txId: " + txId + ", ipaddr: " + ipaddr+")");
+		log(destinationRoot, false, "Installing to " + destinationRoot);
 
 		// Load the destination properties
 //		if ( !destinationRoot.endsWith("/"))

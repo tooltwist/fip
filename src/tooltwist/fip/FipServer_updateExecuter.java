@@ -60,7 +60,6 @@ public class FipServer_updateExecuter
 
 //	public FipUpdateExecuter(byte[] buf, int len)
 //	{
-////System.out.println("Received buffer " + len + " long");
 ////logger.info("Received buffer " + len + " long");
 //		this.buf = buf;
 //		this.length = len;
@@ -100,6 +99,7 @@ public class FipServer_updateExecuter
 		String hashtext = bigInt.toString(16);
 		while (hashtext.length() < 40)
 		  hashtext = "0"+hashtext;
+//		logger.info("hash is " + hashtext);
 		
 		// Compare the calculated seal with the one on the end of the buffer
 		for (int i = 0; i < FipBatchOfUpdates.SEAL_LENGTH; i++)
@@ -259,7 +259,6 @@ public class FipServer_updateExecuter
 						// Write to the log file
 						FipServer.log(destinationRoot, false, "  Manual commit");
 
-						System.out.println("Manually committing");
 						logger.info("Manually committing");
 						long start = System.currentTimeMillis();
 						commitTransaction(destinationRoot, destinationProperties, txId);
@@ -552,7 +551,6 @@ public class FipServer_updateExecuter
 		// Check the directory exists
 		if ( !dirfile.exists())
 		{
-//			System.out.println(" creating directory " + dir);
 //			logger.info(" creating directory " + dir);
 			dirfile.mkdirs();
 		}

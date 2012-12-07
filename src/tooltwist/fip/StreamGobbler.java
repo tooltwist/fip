@@ -19,7 +19,7 @@ public class StreamGobbler extends Thread
 
 	private String processName;
 
-	// If redirect is null, writes to the named file as well as stdout.
+	// If redirect is null, writes to the named file as well as logging.
 	public StreamGobbler(String processName, InputStream is, String type, OutputStream redirect)
 	{
 		this.processName = processName;
