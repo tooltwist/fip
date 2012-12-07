@@ -8,7 +8,7 @@
      philipcallender                                                                
      ====================================================================== -->
 <project name="createZip" default="default">
-	<property name="VERSION" value="1.3"></property>
+	<property name="VERSION" value="1.4"></property>
 	<property name="tmptop" value="/tmp/fip-${VERSION}"></property>
 	<property name="tmpdir" value="/tmp/fip-${VERSION}/fip"></property>
 	<property name="zipfile" value="/tmp/fip-${VERSION}.zip"></property>

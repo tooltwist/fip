@@ -125,7 +125,7 @@ public class Fip
 {
 	private static Logger logger = Logger.getLogger(Fip.class);
 	public static byte MAJOR_VERSION_NUMBER = 0x01;
-	public static byte MINOR_VERSION_NUMBER = 0x03;	
+	public static byte MINOR_VERSION_NUMBER = 0x04;	
 	private Vector<FipRule> rules = new Vector<FipRule>();
 
 	/**

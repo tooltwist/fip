@@ -137,7 +137,8 @@ public class FipServer_updateExecuter
 //		}
 		
 		// Increase the buffer size. All old formats are obsolete
-		else if (major == Fip.MAJOR_VERSION_NUMBER && minor == Fip.MINOR_VERSION_NUMBER)
+//		else if (major == Fip.MAJOR_VERSION_NUMBER && minor == Fip.MINOR_VERSION_NUMBER)
+		else if (major == Fip.MAJOR_VERSION_NUMBER)
 		{
 			return prepareUpdates_1_3(destinationRoot, destinationProperties, txId);
 		}
