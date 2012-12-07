@@ -59,7 +59,7 @@ public class FipBufferCapacityCalculator
 		spaceRequired += 1; // MAGIC_BEFORE_FILE_CONTENTS
 		spaceRequired += fileLen; // File contents
 		spaceRequired += 1; // MAGIC_AFTER_FILE_CONTENTS
-//System.out.println("Guessed size of " + relativePath + " is " + spaceRequired);
+//logger.info("Guessed size of " + relativePath + " is " + spaceRequired);
 		return spaceRequired;
 	}
 

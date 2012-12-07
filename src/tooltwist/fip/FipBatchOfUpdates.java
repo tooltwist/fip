@@ -159,9 +159,9 @@ public class FipBatchOfUpdates
 		// Add the file contents
 		addToBuffer(MAGIC_BEFORE_FILE_CONTENTS);
 		FileInputStream is = new FileInputStream(file);
-//System.out.println("buf.length=" + buf.length + ", nextPos=" + nextPos + ", length=" + length);
+//logger.info("buf.length=" + buf.length + ", nextPos=" + nextPos + ", length=" + length);
 //if (nextPos + length > buf.length) {
-//	System.err.println("Buffer overrun");
+//	logger.error("Buffer overrun");
 //	int abc = 123;
 //}
 		if (is.read(buf, nextPos, length) != length)
@@ -175,7 +175,7 @@ public class FipBatchOfUpdates
 		addTerminator();
 //pos2 = nextPos;
 //size = pos2 - pos1;
-//System.out.println(sourceRelativePath + " took up " + size);
+//logger.info(sourceRelativePath + " took up " + size);
 	}
 	
 	@Deprecated
@@ -327,7 +327,7 @@ public class FipBatchOfUpdates
 			while (hashtext.length() < 40) {
 			  hashtext = "0"+hashtext;
 			}
-//			System.out.println("hash is " + hashtext);
+//			logger.info("hash is " + hashtext);
 		} catch (Exception e) {
 			FipException fipException = new FipException("Could not seal buffer: " + e.toString());
 			fipException.setStackTrace(e.getStackTrace());

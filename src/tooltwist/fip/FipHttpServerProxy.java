@@ -23,10 +23,12 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.log4j.Logger;
 
 
 public class FipHttpServerProxy extends FipServerProxy
 {
+	private static Logger logger = Logger.getLogger(FipHttpServerProxy.class);
 	private String host;
 	private int port;
 
@@ -83,7 +85,7 @@ public class FipHttpServerProxy extends FipServerProxy
 				
 			}
 	    } catch (Exception ex) {
-	    	System.out.println("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
+	    	logger.info("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
 	        ex.printStackTrace();
 	        
 	        FipException exception = new FipException(ex.toString());
@@ -145,12 +147,12 @@ public class FipHttpServerProxy extends FipServerProxy
 			}
 	    } catch (ConnectException ex) {
 	    	String msg = "Could not connect to the remote server. Is it running on the specified machine/port?";
-		System.out.println("ERROR: " + msg);
+		logger.info("ERROR: " + msg);
 	        FipException exception = new FipException(msg);
 	        exception.setStackTrace(ex.getStackTrace());
 	        throw exception;
 	    } catch (Exception ex) {
-	    	System.out.println("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
+	    	logger.info("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
 	        ex.printStackTrace();
 	        
 	        FipException exception = new FipException(ex.toString());
@@ -235,7 +237,7 @@ public class FipHttpServerProxy extends FipServerProxy
 				
 			}
 	    } catch (Exception ex) {
-	    	System.out.println("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
+	    	logger.info("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
 	        ex.printStackTrace();
 	        
 	        FipException exception = new FipException(ex.toString());
@@ -311,7 +313,7 @@ public class FipHttpServerProxy extends FipServerProxy
 			}
 	    } catch (Exception ex) {
 	    	// Write a message to the log file ZZZZZZZZZZZZZZZZZZZZ
-	    	System.out.println("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
+	    	logger.info("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
 	        ex.printStackTrace();
 	        
 	        // Throw an exception
@@ -361,10 +363,10 @@ public class FipHttpServerProxy extends FipServerProxy
 			}
 			else
 			{
-//				System.out.println("Updates completed");
+//				logger.info("Updates completed");
 			}
 	    } catch (Exception ex) {
-	    	System.out.println("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
+	    	logger.info("ERROR: " + ex.getClass().getName() + " "+ ex.getMessage());
 	        ex.printStackTrace();
 	        
 	        FipException exception = new FipException(ex.toString());

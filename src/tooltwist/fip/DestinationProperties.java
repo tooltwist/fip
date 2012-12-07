@@ -7,8 +7,11 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 public class DestinationProperties
 {
+	private static Logger logger = Logger.getLogger(DestinationProperties.class);
 	
 	public enum CommitMode {
 		COMMIT_AS_A_TRANSACTION("transaction"),
@@ -44,8 +47,8 @@ public class DestinationProperties
 		String currentUser = System.getProperty("user.name");
 		if (currentUser != null && currentUser.trim().equals("root"))
 		{
-			System.err.println("Fatal Error: Fip commands may not be run as root.");
-			System.err.println("Exiting now.");
+			logger.error("Fatal Error: Fip commands may not be run as root.");
+			logger.error("Exiting now.");
 			System.exit(1);
 		}
 			

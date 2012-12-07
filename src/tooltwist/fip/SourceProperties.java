@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class SourceProperties
 {
+	private static Logger logger = Logger.getLogger(SourceProperties.class);
 	private String sourceUuid = null;
 	private HashMap<String, String> passphrases = new HashMap<String, String>(); // destinationUuid->passphrase
 
@@ -18,8 +21,8 @@ public class SourceProperties
 		String currentUser = System.getProperty("user.name");
 		if (currentUser != null && currentUser.trim().equals("root"))
 		{
-			System.err.println("Fatal Error: Fip commands may not be run as root.");
-			System.err.println("Exiting now.");
+			logger.error("Fatal Error: Fip commands may not be run as root.");
+			logger.error("Exiting now.");
 			System.exit(1);
 		}
 		

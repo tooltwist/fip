@@ -61,6 +61,7 @@ public class FipServer_updateExecuter
 //	public FipUpdateExecuter(byte[] buf, int len)
 //	{
 ////System.out.println("Received buffer " + len + " long");
+////logger.info("Received buffer " + len + " long");
 //		this.buf = buf;
 //		this.length = len;
 //		this.currentPos = 0;
@@ -99,7 +100,6 @@ public class FipServer_updateExecuter
 		String hashtext = bigInt.toString(16);
 		while (hashtext.length() < 40)
 		  hashtext = "0"+hashtext;
-//		System.out.println("hash is " + hashtext);
 		
 		// Compare the calculated seal with the one on the end of the buffer
 		for (int i = 0; i < FipBatchOfUpdates.SEAL_LENGTH; i++)
@@ -173,7 +173,7 @@ public class FipServer_updateExecuter
 						int positionOfContents = currentPos;
 						currentPos += fileLength;
 						expect(FipBatchOfUpdates.MAGIC_AFTER_FILE_CONTENTS, "MAGIC_END_FILE missing");
-	//System.out.println("=> install " + relativePath + ", " + fileLength + "");
+	//logger.info("=> install " + relativePath + ", " + fileLength + "");
 						
 						if (destinationProperties.isProtected(relativePath))
 						{
@@ -193,7 +193,7 @@ public class FipServer_updateExecuter
 				case FipBatchOfUpdates.OP_DELETE_FILE:
 					{
 						String relativePath = getString();
-	//System.out.println("=> delete " + relativePath);
+	//logger.info("=> delete " + relativePath);
 						expect(FipBatchOfUpdates.MAGIC_AFTER_DELETE, "MAGIC_AFTER_DELETE missing");
 						
 						if (destinationProperties.isProtected(relativePath))
@@ -220,15 +220,15 @@ public class FipServer_updateExecuter
 						// Write to the log file
 						FipServer.log(destinationRoot, false, "  End of batch");
 
-		//				System.out.println("End of transfer file");
+		//				logger.info("End of transfer file");
 						if (destinationProperties.getCommitMode() == CommitMode.COMMIT_AFTER_EVERY_FILE)
 						{
-							System.out.println("Committing files in this transfer");
+							logger.info("Committing files in this transfer");
 							long start = System.currentTimeMillis();
 							commitTransaction(destinationRoot, destinationProperties, txId);
 							long end = System.currentTimeMillis();
 							long duration = end - start;
-							System.out.println("Commit completed in " + duration + "ms.");
+							logger.info("Commit completed in " + duration + "ms.");
 						}
 						
 						return FipInstallUpdatesStatus.OK;
@@ -245,12 +245,12 @@ public class FipServer_updateExecuter
 							TransactionProperties txProperties = TransactionProperties.loadTransactionProperties(destinationRoot, txId);
 							txProperties.changeStatus(destinationRoot, TransactionStatus.READY_TO_COMMIT);
 	
-							System.out.println("Committing transaction");
+							logger.info("Committing transaction");
 							long start = System.currentTimeMillis();
 							commitTransaction(destinationRoot, destinationProperties, txId);
 							long end = System.currentTimeMillis();
 							long duration = end - start;
-							System.out.println("Commit completed in " + duration + "ms.");
+							logger.info("Commit completed in " + duration + "ms.");
 						}
 						return FipInstallUpdatesStatus.COMMITTED;
 					}
@@ -260,11 +260,12 @@ public class FipServer_updateExecuter
 						FipServer.log(destinationRoot, false, "  Manual commit");
 
 						System.out.println("Manually committing");
+						logger.info("Manually committing");
 						long start = System.currentTimeMillis();
 						commitTransaction(destinationRoot, destinationProperties, txId);
 						long end = System.currentTimeMillis();
 						long duration = end - start;
-						System.out.println("Commit completed in " + duration + "ms.");
+						logger.info("Commit completed in " + duration + "ms.");
 						return FipInstallUpdatesStatus.COMMITTED;
 					}
 					
@@ -273,12 +274,12 @@ public class FipServer_updateExecuter
 						// Write to the log file
 						FipServer.log(destinationRoot, false, "  Abort transaction");
 
-						System.out.println("Aborting transaction");
+						logger.info("Aborting transaction");
 						long start = System.currentTimeMillis();
 						abortTransaction(destinationRoot, txId);
 						long end = System.currentTimeMillis();
 						long duration = end - start;
-						System.out.println("Abort completed in " + duration + "ms.");
+						logger.info("Abort completed in " + duration + "ms.");
 						return FipInstallUpdatesStatus.ABORTED;
 					}
 					
@@ -511,7 +512,7 @@ public class FipServer_updateExecuter
 		// Check the directory exists
 		if ( !dirfile.exists())
 		{
-//			System.out.println(" creating directory " + dir);
+//			logger.info(" creating directory " + dir);
 			dirfile.mkdirs();
 		}
 
@@ -535,7 +536,7 @@ public class FipServer_updateExecuter
 			File newFile = new File(newPath);
 			newFile.setExecutable(true);
 		}
-//		System.out.println(" creating " + newPath);
+//		logger.info(" creating " + newPath);
 	}
 
 	public static void prepareDeleteUnderstudyFile(String destinationRoot, String txId, String relativePath) throws IOException
@@ -552,6 +553,7 @@ public class FipServer_updateExecuter
 		if ( !dirfile.exists())
 		{
 //			System.out.println(" creating directory " + dir);
+//			logger.info(" creating directory " + dir);
 			dirfile.mkdirs();
 		}
 
@@ -563,7 +565,7 @@ public class FipServer_updateExecuter
 		File newFile = new File(newPath);
 		newFile.createNewFile();
 		
-//		System.out.println(" creating " + newPath);
+//		logger.info(" creating " + newPath);
 	}
 
 	private int getFileLength()

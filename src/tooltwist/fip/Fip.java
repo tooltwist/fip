@@ -14,6 +14,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.log4j.Logger;
+
 import tooltwist.fip.FipDelta.Type;
 import tooltwist.fip.FipRule.Op;
 import tooltwist.fip.FipBatchOfUpdates.BufferStatus;
@@ -121,6 +123,7 @@ import tooltwist.fip.FipBatchOfUpdates.BufferStatus;
  */
 public class Fip
 {
+	private static Logger logger = Logger.getLogger(Fip.class);
 	public static byte MAJOR_VERSION_NUMBER = 0x01;
 	public static byte MINOR_VERSION_NUMBER = 0x03;	
 	private Vector<FipRule> rules = new Vector<FipRule>();
@@ -189,8 +192,8 @@ public class Fip
 		
 
 		// Load existing definition from the source.
-//		System.out.println("\nClient list=");
-		System.out.println("Indexing source...");
+//		logger.info("\nClient list=");
+		logger.info("Indexing source...");
 		FipList filesAtSource = source.askForFileList(false);
 
 		// Check the rules against each source file.
@@ -209,24 +212,23 @@ public class Fip
 		if (debugMessages)
 		{
 			String list = filesAtSource.serialize(true);
-			System.out.println("Files at source:\n" + list);
 		}
 		
 		// Get the existing files at the destination
-		System.out.println("Indexing destination...");
+		logger.info("Indexing destination...");
 		FipList filesAtDestination = destination.askForFileList(true);
 		if (debugMessages)
 		{
 			String list = filesAtDestination.serialize(false);
-			System.out.println("Files at destination:\n" + list);
+			logger.info("Files at destination:\n" + list);
 		}
 
-		System.out.println("Comparing...");
+		logger.info("Comparing...");
 		FipDeltaList deltaList = filesAtSource.getDelta(filesAtDestination);
 //		if (verbose || listOnly)
 		{
 			String deltaDesc = deltaList.listDeltas();
-			System.out.println("Delta:\n" + deltaDesc);
+			logger.info("Delta:\n" + deltaDesc);
 		}
 		
 		if (listOnly)
@@ -239,7 +241,7 @@ public class Fip
 //		String salt = deltaList.getInitialSalt();
 		
 		// Calculate the approximate total size of the updates
-		System.out.println("Calculating size...");
+		logger.info("Calculating size...");
 		FipBufferCapacityCalculator bcc = new FipBufferCapacityCalculator();
 		long estimatedTotalSize = bcc.spaceRequiredAtStartOfBuffer();
 //int cnt = 1;
@@ -257,7 +259,7 @@ public class Fip
 				spaceRequiredInBuffer = bcc.spaceRequiredForDelete(destinationRelativePath);
 			estimatedTotalSize += spaceRequiredInBuffer;
 //bcc.willItFit(spaceRequiredInBuffer);
-//System.out.println("  after1 " + cnt++ + " total is " + estimatedTotalSize + " --- " + bcc.getSpaceUsed());
+//logger.info("  after1 " + cnt++ + " total is " + estimatedTotalSize + " --- " + bcc.getSpaceUsed());
 //if (cnt==72)
 //{
 //bcc.resetCounter();
@@ -267,8 +269,8 @@ public class Fip
 		int estimatedBatches = (int) (estimatedTotalSize / FipBatchOfUpdates.PREFERRED_MAX_TRANSMISSION) + 1;
 		estimatedTotalSize += estimatedBatches * (bcc.spaceRequiredAtStartOfBuffer() + bcc.spaceRequiredForCommit());
 		if (estimatedTotalSize > 5000)
-			System.out.println("Estimated total size of updates = "+sizeFmt(estimatedTotalSize));
-		System.out.println("Starting transmission...");
+			logger.info("Estimated total size of updates = "+sizeFmt(estimatedTotalSize));
+		logger.info("Starting transmission...");
 
 		// Loop around, getting updates from the source and sending them to the destination, until there are none left
 		FipRequestList requestList = new FipRequestList();
@@ -299,7 +301,7 @@ public class Fip
 				// If this update won't fit in the buffer, send what we have so far.
 				BufferStatus willItFit = bcc.willItFit(spaceRequiredInBuffer);
 //zzz += spaceRequiredInBuffer;
-//System.out.println("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());
+//logger.info("  after2 " + cnt++ + " total is " + zzz + " --- " + bcc.getSpaceUsed());
 				switch (willItFit)
 				{
 				case WILL_FIT:
@@ -322,10 +324,10 @@ public class Fip
 					long perc = (100 * totalSent) / estimatedTotalSize;
 					if (verbose)
 						System.out.print("\n  Total sent="+ sizeFmt(totalSent));
-					System.out.println("  ..."+perc +"%");
+					logger.info("  ..."+perc +"%");
 					if (verbose)
-						System.out.println();
-//System.out.println("Total sent so far = "+ totalSent);
+						logger.info("");
+//logger.info("Total sent so far = "+ totalSent);
 
 					bcc.resetCounter();
 					bcc.willItFit(spaceRequiredInBuffer); // We already know the answer, but this is needed to increment the buffer position.
@@ -357,7 +359,7 @@ public class Fip
 				else
 				{
 					// This should not happen
-					System.out.println("WHAT TYPE IS THIS?");
+					logger.info("WHAT TYPE IS THIS?");
 				}
 
 			}
@@ -367,11 +369,11 @@ public class Fip
 			if (requestList.size() > 0)
 			{
 				int used = bcc.getSpaceUsed();
-				System.out.println("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = "+ cntInstall + " installs, " + cntDelete + " deletes)");
+				logger.info("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = "+ cntInstall + " installs, " + cntDelete + " deletes)");
 				processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, areChanges);
 				bcc.resetCounter();
-//				System.out.println("  ...100%");
-				System.out.println("Total sent = "+ sizeFmt(totalSent));
+//				logger.info("  ...100%");
+				logger.info("Total sent = "+ sizeFmt(totalSent));
 			}
 		}
 		catch (Exception e)
@@ -381,7 +383,7 @@ public class Fip
 			} catch (Exception e2) {
 				// Unable to abort the transaction
 				//ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-				System.err.println("Unable to abort transaction");
+				logger.error("Unable to abort transaction");
 			}
 			if (e instanceof FipException)
 				throw (FipException) e;
@@ -412,7 +414,7 @@ public class Fip
 					// Install
 					if (strings.length != 2)
 						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
-					System.out.println("     => install " + strings[1]);
+					logger.info("     => install " + strings[1]);
 					fip.install(strings[1]);
 				}
 				else if (strings[0].equals("-") || strings[0].toLowerCase().equals("exclude")) {
@@ -422,7 +424,7 @@ public class Fip
 					if (strings.length != 2)
 						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
 					String pattern = strings[1];
-					System.out.println("     => don't install " + strings[1]);
+					logger.info("     => don't install " + strings[1]);
 					fip.dontInstall(pattern);
 				}
 				else if (strings[0].equals("i") || strings[0].toLowerCase().equals("ignore")) {
@@ -433,6 +435,7 @@ public class Fip
 						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
 					String pattern = strings[1];
 					System.out.println("     => ignore " + strings[1]);
+					logger.info("     => ignore " + strings[1]);
 					fip.ignore(pattern);
 				}
 				else if (strings[0].equals("m") || strings[0].toLowerCase().equals("map")) {
@@ -443,7 +446,7 @@ public class Fip
 						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
 					String from = strings[1];
 					String to = strings[2];
-					System.out.println("     => map " + strings[1] + " to " + strings[2]);
+					logger.info("     => map " + strings[1] + " to " + strings[2]);
 					fip.map(from, to);
 				}
 				else if (strings[0].equals("d")) {
@@ -454,7 +457,7 @@ public class Fip
 						throw new FipException("Error in rules file: line " + lineNo + ": " + line);
 					String from = strings[1];
 					String to = strings[2];
-					System.out.println("     => map directory " + strings[1] + " to " + strings[2]);
+					logger.info("     => map directory " + strings[1] + " to " + strings[2]);
 					fip.mapDirectory(from, to);
 				} else {
 					throw new FipException("Unknown instruction in rules file: line " + lineNo + ": " + line);
@@ -463,7 +466,7 @@ public class Fip
 
 			br.close();
 		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
+			logger.error("Error: " + e.getMessage());
 			throw new FipException("Error: " + e.getMessage());
 		}
 	}
@@ -707,28 +710,27 @@ public class Fip
 		File rootDir = new File(rootDirectory);
 		if ( !rootDir.exists() || !rootDir.isDirectory())
 		{
-			System.err.println("Unknown source or destination folder: " + rootDirectory);
+			logger.error("Unknown source or destination folder: " + rootDirectory);
 			System.exit(1);
 		}
 		
-		System.out.println("Loading existing index...");
+		logger.info("Loading existing index...");
 		long time1 = System.currentTimeMillis();
 		FipList list = FipList.loadListFromFile(rootDir);
 		long time2 = System.currentTimeMillis();
 		long duration1 = time2 - time1;
-		System.out.println(" - loaded " + list.numFiles() + " files in " + duration1 + "ms.");
-		System.out.println("Updating index...");
+		logger.info("Updating index...");
 		long time3 = System.currentTimeMillis();
 		list.syncWithRealFiles(rootDir);
 		long time4 = System.currentTimeMillis();
 		long duration2 = time4 - time3;
-		System.out.println(" - updated " + list.numFiles() + " files in " + duration2 + "ms.");
+		logger.info(" - updated " + list.numFiles() + " files in " + duration2 + "ms.");
 		
 		long duration3 = duration1 + duration2;
 		Runtime runtime = Runtime.getRuntime();
 		long totalMemory = runtime.totalMemory() / 1024;
 		long maxMemory = runtime.maxMemory() / 1024;
-		System.out.println("Completed: " + list.numFiles()
+		logger.info("Completed: " + list.numFiles()
 				+ ", " + duration3 + ", " + duration1 + ", " + duration2
 				+ "," + totalMemory + "/" + maxMemory);
 	}
@@ -826,7 +828,7 @@ public class Fip
                     cntExclusiveArgs++;
                     break;
                 case 'V':
-   					System.out.println("FIP version " + MAJOR_VERSION_NUMBER + "." + MINOR_VERSION_NUMBER);
+   					logger.info("FIP version " + MAJOR_VERSION_NUMBER + "." + MINOR_VERSION_NUMBER);
    					System.exit(0);
                     break;
                 default:
@@ -868,7 +870,7 @@ public class Fip
 //				// Commit changes to a destination
 //				if (abortFlag)
 //				{
-//					System.err.println("Sorry, commit AND abort is not possible.");
+//					logger.error("Sorry, commit AND abort is not possible.");
 //					System.exit(1);
 //				}
 //				if (numRemainingArgs != 3)
@@ -904,7 +906,7 @@ public class Fip
 				// Remote client and server
 //				String srcRoot = "/tmp/fip_src";
 //				String dstRoot = "/tmp/fip_dst";
-				System.out.println("Installing from " + sourceUrl + " to " + destinationUrl);
+				logger.info("Installing from " + sourceUrl + " to " + destinationUrl);
 					
 
 //				fip.install(".*");
@@ -938,13 +940,13 @@ public class Fip
 	//fip.map("production/wbd.conf", "files/webdesign/config/wbd/wbd.conf");
 
 				fip.installFiles(sourceUrl, destinationUrl, rulesFile, debugMessages, verbose, listOnly);
-				System.out.println("Finished");
+				logger.info("Finished");
 			}
 
 			
 			
 		} catch (Exception e) {
-			System.err.println("Error: " + e.toString());
+			logger.error("Error: " + e.toString());
 			e.printStackTrace();
 		}
 	}

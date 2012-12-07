@@ -91,7 +91,7 @@ class FipFile implements Comparable<FipFile>, FipRuleParameter
 			while (hashtext.length() < 32 ) {
 			  hashtext = "0"+hashtext;
 			}
-//System.out.println("hash is " + hashtext);
+//logger.info("hash is " + hashtext);
 			this.hash = hashtext;
 		}
 		catch (NoSuchAlgorithmException e)
