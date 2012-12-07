@@ -3,6 +3,8 @@ package tooltwist.fip;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -150,7 +152,7 @@ public class FipServer
 	public void destination_installBatchOfFiles(String destinationRoot, String txId, FipBatchOfUpdates updateBuffer, String ipaddr) throws FipException
 	{
 		log(destinationRoot, true, "installBatchOfFiles (txId: " + txId + ", ipaddr: " + ipaddr+")");
-		log(destinationRoot, false, "Installing to " + destinationRoot);
+		log(destinationRoot, true, "Installing to " + destinationRoot);
 
 		// Load the destination properties
 //		if ( !destinationRoot.endsWith("/"))
@@ -286,12 +288,16 @@ public class FipServer
 	
 	public static void log(String sourceOrDestinationRoot, boolean prefixWithDate, String message) throws FipException
 	{
+		long now = System.currentTimeMillis();
+		Date nowDate = new Date(now);
+		
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("-yyyy-MM-dd-HH");
+		String logfileSuffix = dateFormatter.format(nowDate);
+		
 		// Get the message ready - maybe add a date, check there is a newline on the end.
 		if (prefixWithDate)
 		{
-			long now = System.currentTimeMillis();
-			String nowDate = new Date(now).toString();
-			message = nowDate + ": " + message;
+			message = nowDate.toString() + ": " + message;
 		}
 		if ( !message.endsWith("\n"))
 			message += "\n";
@@ -299,7 +305,7 @@ public class FipServer
 		// Write to the log file
 		FileWriter writer = null;
 		try {
-			String path = sourceOrDestinationRoot + "/" + Fip.PREFIX + "log";
+			String path = sourceOrDestinationRoot + "/" + Fip.PREFIX + "log" + logfileSuffix;
 			writer = new FileWriter(path, true);
 			writer.write(message);
 			writer.close();
