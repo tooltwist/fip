@@ -23,12 +23,12 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FipHttpServerProxy extends FipServerProxy
 {
-	private static Logger logger = Logger.getLogger(FipHttpServerProxy.class);
+	private static Logger logger = LoggerFactory.getLogger(FipHttpServerProxy.class);
 	private String host;
 	private int port;
 

@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SourceProperties
 {
-	private static Logger logger = Logger.getLogger(SourceProperties.class);
+	private static Logger logger = LoggerFactory.getLogger(SourceProperties.class);
 	private String sourceUuid = null;
 	private HashMap<String, String> passphrases = new HashMap<String, String>(); // destinationUuid->passphrase
 

@@ -14,7 +14,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tooltwist.fip.FipDelta.Type;
 import tooltwist.fip.FipRule.Op;
@@ -123,7 +124,7 @@ import tooltwist.fip.FipBatchOfUpdates.BufferStatus;
  */
 public class Fip
 {
-	private static Logger logger = Logger.getLogger(Fip.class);
+	private static Logger logger = LoggerFactory.getLogger(Fip.class);
 	public static byte MAJOR_VERSION_NUMBER = 0x01;
 	public static byte MINOR_VERSION_NUMBER = 0x04;	
 	private Vector<FipRule> rules = new Vector<FipRule>();

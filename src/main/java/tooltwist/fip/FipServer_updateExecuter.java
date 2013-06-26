@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tooltwist.fip.DestinationProperties.CommitMode;
 
@@ -46,7 +47,7 @@ import tooltwist.fip.DestinationProperties.CommitMode;
  */
 public class FipServer_updateExecuter
 {
-	private static Logger logger = Logger.getLogger(FipServer_updateExecuter.class);
+	private static Logger logger = LoggerFactory.getLogger(FipServer_updateExecuter.class);
 	
 	public static final String UNDERSTUDY_PREFIX_NEW_FILE = "+fip_";
 	public static final String UNDERSTUDY_PREFIX_CHANGE_FILE = "@fip_";

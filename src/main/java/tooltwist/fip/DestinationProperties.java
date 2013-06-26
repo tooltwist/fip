@@ -7,11 +7,12 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DestinationProperties
 {
-	private static Logger logger = Logger.getLogger(DestinationProperties.class);
+	private static Logger logger = LoggerFactory.getLogger(DestinationProperties.class);
 	
 	public enum CommitMode {
 		COMMIT_AS_A_TRANSACTION("transaction"),
