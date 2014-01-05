@@ -9,7 +9,7 @@ public class FipRule_mapDirectory extends FipRule
 	public FipRule_mapDirectory(String pathPrefix, String newPathPrefix) throws FipException
 	{
 		if ( !pathPrefix.endsWith("/") || !newPathPrefix.endsWith("/"))
-			throw new FipException("Path prefixes must end with '/'");
+			throw new FipException("Directory path prefixes must end with '/'");
 		this.subPath = pathPrefix;
 		this.newSubPath = newPathPrefix;
 	}
