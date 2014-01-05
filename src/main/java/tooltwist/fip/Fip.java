@@ -317,7 +317,7 @@ public class Fip
 					// Send to the destination server.
 //					int usedInThisBundle = bcc.getSpaceUsed();
 					int used = bcc.getSpaceUsed();
-					System.out.print("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = " + cntInstall + " installs, " + cntDelete + " deletes)");
+					logger.info("  Bundle " + cntBundle++ + " (" + sizeFmt(used) + " = " + cntInstall + " installs, " + cntDelete + " deletes)");
 					processUpdatesAndDeletes(source, destination, requestList, destinationUuid, txId, salt, false);
 					cntInstall = 0;
 					cntDelete = 0;
@@ -450,7 +450,7 @@ public class Fip
 					logger.info("     => map " + strings[1] + " to " + strings[2]);
 					fip.map(from, to);
 				}
-				else if (strings[0].equals("d")) {
+				else if (strings[0].equals("d") || strings[0].toLowerCase().equals("mapDirectory")) {
 					
 					// d <from> <to>
 					// Map directory
