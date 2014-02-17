@@ -242,6 +242,7 @@ public class FipList
 		// For each file in list1, check it is the same in list2
 		for (FipFile f1 : this.files())
 		{
+			
 			Op op = f1.getOp();
 			if (op == Op.EXCLUDE)
 				continue;
@@ -263,18 +264,26 @@ public class FipList
 			String destinationRelativePath = f1.getDestinationRelativePath();
 
 			FipFile f2 = list2.list.get(destinationRelativePath);
-			if (f2 == null)
+			if (f2 == null) {
+				
+				// The is a new file
 				deltaList.addDelta(sourceRelativePath, destinationRelativePath, fileSize, FipDelta.Type.NEW);
-			else
-			{
-				long length1 = f1.getFileSize();
-				long length2 = f2.getFileSize();
-				String checksum1 = f1.getChecksum();
-				String checksum2 = f2.getChecksum();
-
-				if (length2 != length1 || !checksum2.equals(checksum1))
-					deltaList.addDelta(sourceRelativePath, destinationRelativePath, fileSize, FipDelta.Type.CHANGE);
-
+				
+			} else { 
+								
+				// This might be a changed file
+				if (f2.getOp() != Op.IGNORE) {
+					
+					// Compare the length and checksum
+					long length1 = f1.getFileSize();
+					long length2 = f2.getFileSize();
+					String checksum1 = f1.getChecksum();
+					String checksum2 = f2.getChecksum();
+	
+					if (length2 != length1 || !checksum2.equals(checksum1))
+						deltaList.addDelta(sourceRelativePath, destinationRelativePath, fileSize, FipDelta.Type.CHANGE);
+				}
+				
 				f2.setCheckedForDelta(true);
 			}
 		}
@@ -282,7 +291,11 @@ public class FipList
 		// Look for records in list2, that were not checked (ie. are not in list1)
 		for (FipFile f2 : list2.files())
 		{
-			if ( !f2.getCheckedForDelta())
+
+			// If the file is not being ignored, and wasn't in the source list, it'll need to be deleted.
+			boolean notCheckedYet = !f2.getCheckedForDelta();
+			boolean notIgnored = f2.getOp() != Op.IGNORE;
+			if (notCheckedYet && notIgnored)
 			{
 				String relativePath = f2.getSourceRelativePath();
 				long fileSize = f2.getFileSize();

@@ -224,6 +224,18 @@ public class Fip
 			String list = filesAtDestination.serialize(false);
 			logger.info("Files at destination:\n" + list);
 		}
+		
+		// Mark any destination files that should be ignored,
+		// so they won't be added to the delta list.
+		for (FipFile f : filesAtDestination.files()) {
+			for (FipRule r : rules)
+			{
+				if (r instanceof FipRule_ignore) { 
+					r.setRuleParametersForFile(f);
+				}
+			}
+		}
+
 
 		logger.info("Comparing...");
 		FipDeltaList deltaList = filesAtSource.getDelta(filesAtDestination);
