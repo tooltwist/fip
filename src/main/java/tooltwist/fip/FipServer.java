@@ -271,6 +271,10 @@ public class FipServer
 		
 		// Get the passphrase for the destination uuid, and seal the buffer.
 		String passphrase = sourceProperties.getPassphrase(destinationUuid);
+		if (passphrase == null){
+			log(sourceRoot, false, "  No passphrase defined for this destination in .fip-source");
+			throw new FipException("No passphrase defined for this destination in .fip-source");
+		}
 		updateList.sealTheBuffer(txId, salt, passphrase);
 		
 		log(sourceRoot, false, "  - complete -");
