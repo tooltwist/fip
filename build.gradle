@@ -18,11 +18,6 @@ dependencies {
  *
  *	NOTE: Standard code from here on down.
  *
- *	Values defined in ../gradle.properties:
- *		PROJECT_GROUP, PROJECT_SOURCE_COMPATIBILITY, PROJECT_VERSION, PROJECT_REPO
- *
- *	Values defined in ~/.gradle/gradle.properties:
- *		artifactory_user, artifactory_password, artifactory_repo
  */
 group = PROJECT_GROUP
 version = PROJECT_VERSION
