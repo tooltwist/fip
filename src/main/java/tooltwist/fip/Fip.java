@@ -243,6 +243,7 @@ public class Fip
 		{
 			String deltaDesc = deltaList.listDeltas();
 			logger.info("Delta:\n" + deltaDesc);
+System.out.println("Delta:\n" + deltaDesc);
 		}
 		
 		if (listOnly)
