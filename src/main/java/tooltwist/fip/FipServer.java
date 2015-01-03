@@ -312,6 +312,7 @@ public class FipServer
 			String path = sourceOrDestinationRoot + "/" + Fip.PREFIX + "log" + logfileSuffix;
 			writer = new FileWriter(path, true);
 			writer.write(message);
+			writer.flush();
 			writer.close();
 		} catch (IOException e) {
 			throw new FipException("Error writing to log file: " + e.toString());

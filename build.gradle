@@ -43,16 +43,16 @@ configurations {
 artifactory {
     publish {
         repository {
-	    contextUrl = "${TOOLTWIST_PUBLISH_ARTIFACTORY_CONTEXTURL}"
-	    repoKey = isSnapshot ? "${TOOLTWIST_PUBLISH_SNAPSHOT_REPO}" : "${TOOLTWIST_PUBLISH_RELEASE_REPO}"
-            username = "${TOOLTWIST_PUBLISH_ARTIFACTORY_USER}"
-            password = "${TOOLTWIST_PUBLISH_ARTIFACTORY_PASSWORD}"
+            contextUrl = "${PUBLISH_CONTEXTURL}"
+            repoKey = isSnapshot ? "${PUBLISH_SNAPSHOT_REPO}" : "${PUBLISH_RELEASE_REPO}"
+            username = "${ARTIFACTORY_USER}"
+            password = "${ARTIFACTORY_PASSWORD}"
             maven = true
-	    ivy { 
-	      ivyLayout = '[organization]/[module]/ivy-[revision].xml' 
-	      artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]' 
+	    ivy {
+	      ivyLayout = '[organization]/[module]/ivy-[revision].xml'
+	      artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
 	      mavenCompatible = true
-	    } 
+	    }
         }
 	defaults {
 	    publishConfigs('archives', 'published')
@@ -61,16 +61,16 @@ artifactory {
     }
     resolve {
         repository {
-	    contextUrl = "${TOOLTWIST_ARTIFACTORY_CONTEXTURL}"
-            repoKey = "${TOOLTWIST_ARTIFACTORY_REPO}"
-            username = "${TOOLTWIST_ARTIFACTORY_USER}"
-            password = "${TOOLTWIST_ARTIFACTORY_PASSWORD}"
+            contextUrl = "${RESOLVE_CONTEXTURL}"
+            repoKey = "${RESOLVE_REPO}"
+            username = "${ARTIFACTORY_USER}"
+            password = "${ARTIFACTORY_PASSWORD}"
             maven = true
         }
     }
 }
 
- 
+
 // Note that tests only get run when the code changes
 test {
     testLogging {
