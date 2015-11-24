@@ -296,6 +296,8 @@ public class FipHttpServerProxy extends FipServerProxy
             if (statusCode != HttpStatus.SC_OK)
 			{
 				// Error ZZZZZZZZZ
+    	    	logger.error("ERROR: askForUpdates: Unknown response from server: " + statusCode + ": " + HttpStatus.getStatusText(statusCode));
+    	    	logger.error("Url was: " + url);
 				throw new FipException("Unknown response from server: " + statusCode + ": " + HttpStatus.getStatusText(statusCode));
 			}
 			else
@@ -359,6 +361,8 @@ public class FipHttpServerProxy extends FipServerProxy
 
             if (statusCode != HttpStatus.SC_OK)
 			{
+    	    	logger.error("ERROR: sendUpdates: Unknown response from server: " + statusCode + ": " + HttpStatus.getStatusText(statusCode));
+    	    	logger.error("Url was: " + url);
 				throw new FipException("Unknown response from server: " + statusCode + ": " + HttpStatus.getStatusText(statusCode));
 			}
 			else

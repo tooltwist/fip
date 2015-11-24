@@ -244,16 +244,20 @@ public class FipServer_updateExecuter
 						// Change the transaction status
 						if (destinationProperties.getCommitMode() == CommitMode.COMMIT_AS_A_TRANSACTION)
 						{
+FipServer.log(destinationRoot, false, "  End of transaction - ok 1");
 							TransactionProperties txProperties = TransactionProperties.loadTransactionProperties(destinationRoot, txId);
 							txProperties.changeStatus(destinationRoot, TransactionStatus.READY_TO_COMMIT);
 	
 							logger.info("Committing transaction");
 							long start = System.currentTimeMillis();
+FipServer.log(destinationRoot, false, "  End of transaction - ok 2");
 							commitTransaction(destinationRoot, destinationProperties, txId);
 							long end = System.currentTimeMillis();
 							long duration = end - start;
 							logger.info("Commit completed in " + duration + "ms.");
+FipServer.log(destinationRoot, false, "  End of transaction - ok 3");
 						}
+FipServer.log(destinationRoot, false, "  End of transaction - ok 4");
 						return FipInstallUpdatesStatus.COMMITTED;
 					}
 				case FipBatchOfUpdates.OP_COMMIT_TRANSACTION:
@@ -291,6 +295,7 @@ public class FipServer_updateExecuter
 				}
 			}
 		} catch (IOException e) {
+			logger.error("prepareUpdates_1_3: error processing updates: " + e.toString());
 			FipException fipException = new FipException("Error processing updates: " + e.toString());
 			fipException.setStackTrace(e.getStackTrace());
 			throw fipException;
@@ -342,12 +347,17 @@ public class FipServer_updateExecuter
 		}
 		
 		// Move the transaction properties file to the new directory
+FipServer.log(destinationRoot, false, "SJSJSJS commitTransaction ok 1");
 		File oldPropertiesFile = new File(transactionRoot + "/" + TransactionProperties.TRANSACTION_PROPERTIES_FILE);
+FipServer.log(destinationRoot, false, "SJSJSJS commitTransaction ok 2");
 		File newPropertiesFile = new File(transactionUndoRoot + "/" + TransactionProperties.TRANSACTION_PROPERTIES_FILE);
+FipServer.log(destinationRoot, false, "SJSJSJS commitTransaction ok 3");
 		oldPropertiesFile.renameTo(newPropertiesFile);
+FipServer.log(destinationRoot, false, "SJSJSJS commitTransaction ok 4");
 		
 		// Remove the old batch directory
 		recursivelyDeleteEmptyDirectoryHierarchy(dir);
+FipServer.log(destinationRoot, false, "SJSJSJS commitTransaction ok 5");
 	}
 
 	/**
