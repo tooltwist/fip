@@ -125,8 +125,8 @@ import tooltwist.fip.FipBatchOfUpdates.BufferStatus;
 public class Fip
 {
 	private static Logger logger = LoggerFactory.getLogger(Fip.class);
-	public static byte MAJOR_VERSION_NUMBER = 0x01;
-	public static byte MINOR_VERSION_NUMBER = 0x05;	
+	public static byte MAJOR_VERSION_NUMBER = 0x85;
+	public static byte MINOR_VERSION_NUMBER = 0x00;	
 	private Vector<FipRule> rules = new Vector<FipRule>();
 
 	/**
